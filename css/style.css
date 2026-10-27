@@ -1,0 +1,468 @@
+/* ========== 阳宅风水 · 样式 ========== */
+:root {
+  --paper: #f7f3e8;
+  --paper-deep: #efe8d6;
+  --ink: #2b2620;
+  --ink-soft: #5c5346;
+  --red: #a63c2a;
+  --red-deep: #7e2a1d;
+  --gold: #b8860b;
+  --gold-soft: #d4af37;
+  --line: #ddd3bd;
+  --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Source Han Serif SC", serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 导航 ---------- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.4rem;
+  background: rgba(247, 243, 232, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--red);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+}
+
+.brand-gua { color: var(--gold); margin-right: 0.3rem; }
+
+.nav-links a {
+  margin-left: 1.4rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.98rem;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--red); }
+
+@media (max-width: 640px) {
+  .nav { flex-direction: column; gap: 0.35rem; }
+  .nav-links a { margin: 0 0.55rem; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  text-align: center;
+  padding: 6.5rem 1.5rem 5.5rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212, 175, 55, 0.22), transparent 60%),
+    linear-gradient(160deg, #7e2a1d 0%, #a63c2a 45%, #8f3322 100%);
+  color: #f7f1e3;
+}
+
+.hero-gua {
+  font-size: 1.35rem;
+  letter-spacing: 0.9em;
+  margin-bottom: 1.6rem;
+  color: rgba(247, 241, 227, 0.75);
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 7vw, 4.4rem);
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-soft);
+  margin-bottom: 1.4rem;
+}
+
+.hero-desc {
+  max-width: 620px;
+  margin: 0 auto 2.4rem;
+  color: rgba(247, 241, 227, 0.88);
+  font-size: 1.02rem;
+}
+
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.72rem 2rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-family: var(--serif);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #f7f1e3;
+  border-color: var(--red-deep);
+}
+
+.btn-primary:hover { background: var(--red-deep); }
+
+.btn-ghost {
+  background: transparent;
+  color: #f7f1e3;
+  border-color: rgba(247, 241, 227, 0.6);
+}
+
+.btn-ghost:hover { border-color: #f7f1e3; background: rgba(247, 241, 227, 0.08); }
+
+/* ---------- 区块 ---------- */
+.section { padding: 4.5rem 1.5rem; max-width: 1080px; margin: 0 auto; }
+
+.section-alt {
+  max-width: none;
+  background: var(--paper-deep);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.section-alt > * { max-width: 1080px; margin-left: auto; margin-right: auto; }
+
+.section-title {
+  text-align: center;
+  font-size: 1.9rem;
+  letter-spacing: 0.25em;
+  text-indent: 0.25em;
+  color: var(--red);
+  margin-bottom: 0.6rem;
+}
+
+.section-title::before,
+.section-title::after {
+  content: "❖";
+  font-size: 0.85rem;
+  color: var(--gold);
+  margin: 0 0.9rem;
+  vertical-align: middle;
+}
+
+.section-intro {
+  max-width: 720px;
+  margin: 0 auto 2.6rem;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+}
+
+/* ---------- 命卦测算 ---------- */
+.calc-card {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 2.2rem;
+  box-shadow: 0 8px 30px rgba(43, 38, 32, 0.07);
+}
+
+.calc-form {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.field label { font-weight: 700; letter-spacing: 0.1em; }
+
+.field input[type="date"],
+.house-control select {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.field small, .house-control small {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.radio-row { display: flex; gap: 0.6rem; }
+
+.radio input { position: absolute; opacity: 0; }
+
+.radio span {
+  display: inline-block;
+  padding: 0.5rem 1.6rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.15s;
+}
+
+.radio input:checked + span {
+  background: var(--red);
+  border-color: var(--red-deep);
+  color: #f7f1e3;
+}
+
+.calc-result { margin-top: 2.4rem; border-top: 1px dashed var(--line); padding-top: 2rem; }
+
+.result-head {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.gua-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  background: linear-gradient(150deg, var(--red), var(--red-deep));
+  color: #f7f1e3;
+  padding: 0.8rem 1.8rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(126, 42, 29, 0.35);
+}
+
+.gua-badge span { font-size: 1.6rem; color: var(--gold-soft); }
+.gua-badge strong { font-size: 1.5rem; letter-spacing: 0.15em; }
+.gua-badge em { font-style: normal; opacity: 0.85; }
+
+.result-meta { text-align: center; }
+.result-meta p:first-child { font-size: 1.1rem; font-weight: 700; color: var(--gold); letter-spacing: 0.1em; }
+.result-meta p:last-child { color: var(--ink-soft); font-size: 0.9rem; }
+
+.result-body {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px) 1fr;
+  gap: 2.4rem;
+  align-items: center;
+}
+
+@media (max-width: 760px) {
+  .result-body { grid-template-columns: 1fr; }
+  .calc-card { padding: 1.4rem; }
+}
+
+.result-compass svg, .house-compass svg {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.result-lists { display: grid; gap: 1.2rem; }
+
+.list-block {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  background: #fff;
+}
+
+.list-block.good { border-left: 4px solid var(--red); }
+.list-block.bad { border-left: 4px solid #45505c; }
+
+.list-block h3 { font-size: 1.05rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+.list-block.good h3 { color: var(--red); }
+.list-block.bad h3 { color: #45505c; }
+
+.list-block ul { list-style: none; }
+
+.list-block li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.32rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.95rem;
+}
+
+.list-block li:last-child { border-bottom: none; }
+
+.list-block li b { flex-shrink: 0; }
+.list-block li small { color: var(--ink-soft); text-align: right; }
+
+/* ---------- 宅向吉凶 ---------- */
+.house-card {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 2.2rem;
+  box-shadow: 0 8px 30px rgba(43, 38, 32, 0.07);
+}
+
+.house-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 2.2rem;
+}
+
+.house-control label { font-weight: 700; letter-spacing: 0.12em; }
+
+.house-body {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 2.6rem;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .house-body { grid-template-columns: 1fr; }
+  .house-card { padding: 1.4rem; }
+}
+
+.house-advice h3 {
+  color: var(--red);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.9rem;
+  font-size: 1.25rem;
+}
+
+.house-advice ul { list-style: none; margin-bottom: 1.4rem; }
+
+.house-advice li {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.97rem;
+}
+
+.house-advice li b { color: var(--gold); margin-right: 0.4rem; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; }
+
+.legend .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.legend .dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ---------- 知识卡片 ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.4rem;
+}
+
+.card {
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.5rem 1.6rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 26px rgba(43, 38, 32, 0.1);
+}
+
+.card h3 {
+  color: var(--red);
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.55rem;
+}
+
+.card h3::before { content: "◈ "; color: var(--gold); }
+
+.card p { font-size: 0.93rem; color: var(--ink); margin-bottom: 0.5rem; }
+
+.card .fix {
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--line);
+  padding-top: 0.5rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+}
+
+.card .fix b { color: var(--gold); }
+
+/* ---------- 关于 ---------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.4rem;
+}
+
+.about-item {
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.5rem 1.6rem;
+}
+
+.about-item h3 {
+  color: var(--red);
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.55rem;
+}
+
+.about-item p { font-size: 0.92rem; color: var(--ink-soft); }
+
+/* ---------- 页脚 ---------- */
+.footer {
+  text-align: center;
+  padding: 2.6rem 1.5rem 2.2rem;
+  background: #2b2620;
+  color: rgba(247, 241, 227, 0.85);
+  font-size: 0.9rem;
+}
+
+.footer-disclaimer {
+  color: var(--gold-soft);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-hide { display: inline; }
+
+@media (max-width: 640px) {
+  .mobile-hide { display: none; }
+  .hero { padding: 4.5rem 1.2rem 4rem; }
+}
