@@ -16,20 +16,32 @@ const HOUSES = {
   '乾': ['六煞', '天医', '五鬼', '祸害', '绝命', '延年', '生气', '伏位'],
 };
 
-// 九星信息:吉凶分色与释义
+// 九星信息:吉凶分色 + 小白友好的「人话」解读
 const STARS = {
-  '生气': { color: '#b03a2e', level: '大吉', desc: '贪狼吉星,主事业与人丁兴旺,宜大门、主卧、书房' },
-  '延年': { color: '#bf5b2a', level: '吉',   desc: '武曲吉星,主婚姻感情与寿元,宜主卧、老人房' },
-  '天医': { color: '#c0902a', level: '中吉', desc: '巨门吉星,主健康与贵人,宜卧室、儿童房' },
-  '伏位': { color: '#8a9a5b', level: '小吉', desc: '辅弼吉星,主平稳安定,宜常坐久卧之处' },
-  '祸害': { color: '#6b7f8e', level: '小凶', desc: '禄存凶星,主是非损耗,宜作储物间压制' },
-  '六煞': { color: '#5d6d7e', level: '凶',   desc: '文曲凶星,主口舌烦扰,宜厨房、卫生间压制' },
-  '五鬼': { color: '#45505c', level: '大凶', desc: '廉贞凶星,主口舌火患,宜厨房(火炼)或卫生间压制' },
-  '绝命': { color: '#343f4b', level: '大凶', desc: '破军凶星,主体弱破财,最忌大门主卧,宜卫生间压制' },
+  '生气': { color: '#b03a2e', level: '大吉', emoji: '🚀', role: '事业财运位', plain: '放书桌、办公桌,或平时最常待的房间' },
+  '延年': { color: '#bf5b2a', level: '吉',   emoji: '💞', role: '感情婚姻位', plain: '适合主卧、老人房,家庭和气' },
+  '天医': { color: '#c0902a', level: '中吉', emoji: '💪', role: '健康贵人位', plain: '适合睡觉休息,也适合儿童房' },
+  '伏位': { color: '#8a9a5b', level: '小吉', emoji: '🍃', role: '平稳安稳位', plain: '适合静养、看书、发呆的好地方' },
+  '祸害': { color: '#6b7f8e', level: '小凶', emoji: '🫠', role: '小是小非位', plain: '影响不大,保持整洁就行' },
+  '六煞': { color: '#5d6d7e', level: '凶',   emoji: '🗯️', role: '口舌是非位', plain: '留给储物间,少在这儿久待' },
+  '五鬼': { color: '#45505c', level: '大凶', emoji: '😤', role: '易吵易燥位', plain: '让厨房、卫生间「镇住」它' },
+  '绝命': { color: '#343f4b', level: '大凶', emoji: '⛔', role: '最需要避开', plain: '别当主卧、大门,尽量别久待' },
 };
 
 const TRIGRAM_SYMBOL = { '坎': '☵', '离': '☲', '震': '☳', '巽': '☴', '乾': '☰', '坤': '☷', '艮': '☶', '兑': '☱' };
 const EAST_FOUR = ['坎', '离', '震', '巽'];
+
+// 两类命的吉利方向(用于一句话解读)
+const GROUP_DIRS = {
+  '东四命': ['北', '东', '东南', '南'],
+  '西四命': ['西', '西北', '东北', '西南'],
+};
+
+// 坐向叫法(用于宅向图标题)
+const SIT_LABEL = {
+  '坎': '坐北朝南', '艮': '坐东北朝西南', '震': '坐东朝西', '巽': '坐东南朝西北',
+  '离': '坐南朝北', '坤': '坐西南朝东北', '兑': '坐西朝东', '乾': '坐西北朝东南',
+};
 
 /* ---------- 命卦计算 ---------- */
 // 以立春(约 2 月 4 日)为年份分界;年份各位数字反复相加至一位数,
@@ -96,7 +108,8 @@ function renderLegend(container) {
 function starListHtml(names, gua) {
   return names.map(name => {
     const dir = DIRECTIONS[HOUSES[gua].indexOf(name)];
-    return `<li><b>${name} · ${dir}方</b><small>${STARS[name].desc}</small></li>`;
+    const s = STARS[name];
+    return `<li><b>${s.emoji} ${name} · ${dir}方(${s.role})</b><small>${s.plain}</small></li>`;
   }).join('');
 }
 
@@ -108,18 +121,26 @@ document.getElementById('calc-form').addEventListener('submit', function (e) {
   const isMale = this.gender.value === 'male';
   const gua = computeMingGua(year, month, day, isMale);
   const group = EAST_FOUR.includes(gua) ? '东四命' : '西四命';
+  const goodDirs = GROUP_DIRS[group];
+  const beforeLichun = month < 2 || (month === 2 && day < 4);
 
   document.getElementById('result-gua-symbol').textContent = TRIGRAM_SYMBOL[gua];
   document.getElementById('result-gua-name').textContent = gua + '命';
   document.getElementById('result-gua-trigram').textContent = group;
-  document.getElementById('result-group').textContent = `${group} · 宜配${group.slice(0, 2)}宅`;
   document.getElementById('result-year').textContent =
-    `出生 ${value} · ${isMale ? '男' : '女'}命${month < 2 || (month === 2 && day < 4) ? `(立春前,按 ${year - 1} 年计)` : ''}`;
+    `出生 ${value} · ${isMale ? '男' : '女'}命${beforeLichun ? `(立春前出生,按 ${year - 1} 年计算)` : ''}`;
+
+  document.getElementById('result-summary').innerHTML =
+    `📌 <b>一句话解读:</b>你的吉利方向集中在 <b>${goodDirs.join('、')}</b>。` +
+    `挑房间、放床头、摆书桌,优先选这四个方向;剩下的方向,让厨房、卫生间、储物间去「占」就好。`;
 
   document.getElementById('result-good').innerHTML =
     starListHtml(['生气', '延年', '天医', '伏位'], gua);
   document.getElementById('result-bad').innerHTML =
     starListHtml(['绝命', '五鬼', '六煞', '祸害'], gua);
+
+  document.getElementById('result-sleep').innerHTML =
+    `🛏️ <b>睡觉小技巧:</b>床头尽量靠吉方(${goodDirs.join(' / ')})的墙。就算不信这个,床头靠实墙、不靠窗,也确实睡得更踏实。`;
 
   renderCompass(document.getElementById('calc-compass'), gua);
   document.getElementById('calc-result').hidden = false;
@@ -132,14 +153,14 @@ function dirOf(gua, star) {
 }
 
 function renderHouse(gua) {
-  document.getElementById('house-title').textContent = `${gua}宅 · 八方吉凶与布局建议`;
+  document.getElementById('house-title').textContent = `${SIT_LABEL[gua]} · ${gua}宅方位图`;
   const items = [
-    ['大门', `宜开在 <b style="color:${STARS['生气'].color}">${dirOf(gua, '生气')}</b> 或 <b style="color:${STARS['延年'].color}">${dirOf(gua, '延年')}</b> 方,纳吉气入宅`],
-    ['主卧', `宜设于 ${dirOf(gua, '生气')}、${dirOf(gua, '延年')} 或 ${dirOf(gua, '天医')} 方`],
-    ['书房', `宜设于 ${dirOf(gua, '伏位')} 或 ${dirOf(gua, '生气')} 方,利静思与学业`],
-    ['厨房', `宜压凶方,设在 ${dirOf(gua, '祸害')} 或 ${dirOf(gua, '六煞')} 方,灶口朝吉方`],
-    ['卫生间', `宜设于 ${dirOf(gua, '五鬼')} 或 ${dirOf(gua, '绝命')} 方,以洁污压制凶星`],
-    ['忌', `大门、主卧落于 ${dirOf(gua, '绝命')}、${dirOf(gua, '五鬼')} 方,宜调整功能分区`],
+    ['🚪 大门 / 进门处', `开在 <em>${dirOf(gua, '生气')}</em>(生气)或 <em>${dirOf(gua, '延年')}</em>(延年)最好,进门就带好运`],
+    ['🛏️ 主卧', `放在 <em>${dirOf(gua, '生气')}</em>、<em>${dirOf(gua, '延年')}</em> 或 <em>${dirOf(gua, '天医')}</em>,睡在吉方休息更好`],
+    ['📚 书桌 / 办公桌', `摆在 <em>${dirOf(gua, '伏位')}</em> 或 <em>${dirOf(gua, '生气')}</em>,学习工作更专注`],
+    ['🍳 厨房', `放在 ${dirOf(gua, '祸害')}、${dirOf(gua, '六煞')} 这样的凶方反而好,让「火」压住晦气`],
+    ['🚽 卫生间', `放在 ${dirOf(gua, '五鬼')}、${dirOf(gua, '绝命')} 正合适,把家里最不利的位置给它`],
+    ['⚠️ 特别注意', `<em>${dirOf(gua, '绝命')}</em>、<em>${dirOf(gua, '五鬼')}</em> 尽量别当主卧和大门;改不了的话,保持明亮整洁、常通风即可,不必焦虑`],
   ];
   document.getElementById('house-advice-list').innerHTML =
     items.map(([k, v]) => `<li><b>${k}</b>${v}</li>`).join('');

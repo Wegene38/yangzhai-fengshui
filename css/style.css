@@ -8,6 +8,8 @@
   --red-deep: #7e2a1d;
   --gold: #b8860b;
   --gold-soft: #d4af37;
+  --gold-bg: #faf3dd;
+  --gold-line: #e5d5a1;
   --line: #ddd3bd;
   --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Source Han Serif SC", serif;
 }
@@ -67,7 +69,7 @@ body {
 /* ---------- Hero ---------- */
 .hero {
   text-align: center;
-  padding: 6.5rem 1.5rem 5.5rem;
+  padding: 6rem 1.5rem 5rem;
   background:
     radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212, 175, 55, 0.22), transparent 60%),
     linear-gradient(160deg, #7e2a1d 0%, #a63c2a 45%, #8f3322 100%);
@@ -97,7 +99,7 @@ body {
 }
 
 .hero-desc {
-  max-width: 620px;
+  max-width: 640px;
   margin: 0 auto 2.4rem;
   color: rgba(247, 241, 227, 0.88);
   font-size: 1.02rem;
@@ -151,8 +153,8 @@ body {
 .section-title {
   text-align: center;
   font-size: 1.9rem;
-  letter-spacing: 0.25em;
-  text-indent: 0.25em;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
   color: var(--red);
   margin-bottom: 0.6rem;
 }
@@ -173,6 +175,89 @@ body {
   color: var(--ink-soft);
   font-size: 0.98rem;
 }
+
+/* ---------- 新手指南 ---------- */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.4rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.step {
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.6rem 1.6rem 1.4rem;
+  text-align: center;
+}
+
+.step-num { font-size: 1.7rem; margin-bottom: 0.4rem; }
+
+.step h3 {
+  color: var(--red);
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+}
+
+.step p { font-size: 0.93rem; color: var(--ink-soft); text-align: left; }
+.step p b { color: var(--ink); }
+
+.tip-box {
+  max-width: 920px;
+  margin: 1.8rem auto 0;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 10px;
+  padding: 1.1rem 1.5rem;
+  font-size: 0.96rem;
+}
+
+.glossary {
+  max-width: 920px;
+  margin: 1.3rem auto 0;
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+}
+
+.glossary summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+.glossary[open] summary { margin-bottom: 0.4rem; }
+
+.glossary p { font-size: 0.92rem; color: var(--ink-soft); }
+.glossary p b { color: var(--ink); }
+
+/* ---------- 怎么看朝向教程 ---------- */
+.howto {
+  max-width: 920px;
+  margin: 0 auto 2.4rem;
+  background: #fffdf7;
+  border: 1px dashed var(--gold);
+  border-radius: 10px;
+  padding: 1.3rem 1.7rem;
+}
+
+.howto h3 {
+  color: var(--red);
+  font-size: 1.08rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.howto ol { margin-left: 1.3rem; }
+
+.howto li { font-size: 0.95rem; margin: 0.3rem 0; color: var(--ink); }
+.howto li b { color: var(--red-deep); }
 
 /* ---------- 命卦测算 ---------- */
 .calc-card {
@@ -241,7 +326,7 @@ body {
   gap: 1.6rem;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.4rem;
 }
 
 .gua-badge {
@@ -259,9 +344,20 @@ body {
 .gua-badge strong { font-size: 1.5rem; letter-spacing: 0.15em; }
 .gua-badge em { font-style: normal; opacity: 0.85; }
 
-.result-meta { text-align: center; }
-.result-meta p:first-child { font-size: 1.1rem; font-weight: 700; color: var(--gold); letter-spacing: 0.1em; }
-.result-meta p:last-child { color: var(--ink-soft); font-size: 0.9rem; }
+.result-meta { text-align: center; color: var(--ink-soft); font-size: 0.9rem; }
+
+.plain-summary {
+  max-width: 860px;
+  margin: 0 auto 1.8rem;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 8px;
+  padding: 0.9rem 1.3rem;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.plain-summary b { color: var(--red-deep); }
 
 .result-body {
   display: grid;
@@ -283,7 +379,7 @@ body {
   margin: 0 auto;
 }
 
-.result-lists { display: grid; gap: 1.2rem; }
+.result-lists { display: grid; gap: 1.2rem; align-content: start; }
 
 .list-block {
   border: 1px solid var(--line);
@@ -295,25 +391,36 @@ body {
 .list-block.good { border-left: 4px solid var(--red); }
 .list-block.bad { border-left: 4px solid #45505c; }
 
-.list-block h3 { font-size: 1.05rem; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+.list-block h3 { font-size: 1.02rem; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
 .list-block.good h3 { color: var(--red); }
 .list-block.bad h3 { color: #45505c; }
 
 .list-block ul { list-style: none; }
 
 .list-block li {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.32rem 0;
+  padding: 0.42rem 0;
   border-bottom: 1px dashed var(--line);
   font-size: 0.95rem;
 }
 
 .list-block li:last-child { border-bottom: none; }
 
-.list-block li b { flex-shrink: 0; }
-.list-block li small { color: var(--ink-soft); text-align: right; }
+.list-block li b { display: block; }
+
+.list-block li small {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.sleep-tip {
+  background: #f2efe4;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+}
 
 /* ---------- 宅向吉凶 ---------- */
 .house-card {
@@ -350,9 +457,9 @@ body {
 
 .house-advice h3 {
   color: var(--red);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   margin-bottom: 0.9rem;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
 }
 
 .house-advice ul { list-style: none; margin-bottom: 1.4rem; }
@@ -364,6 +471,7 @@ body {
 }
 
 .house-advice li b { color: var(--gold); margin-right: 0.4rem; }
+.house-advice li em { font-style: normal; color: var(--red-deep); font-weight: 700; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; }
 
@@ -381,10 +489,16 @@ body {
   display: inline-block;
 }
 
+.color-note {
+  margin-top: 0.8rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
 /* ---------- 知识卡片 ---------- */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 1.4rem;
 }
 
@@ -404,13 +518,12 @@ body {
 .card h3 {
   color: var(--red);
   font-size: 1.15rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   margin-bottom: 0.55rem;
 }
 
-.card h3::before { content: "◈ "; color: var(--gold); }
-
-.card p { font-size: 0.93rem; color: var(--ink); margin-bottom: 0.5rem; }
+.card p { font-size: 0.92rem; color: var(--ink); margin-bottom: 0.5rem; }
+.card p b { color: var(--red-deep); }
 
 .card .fix {
   color: var(--ink-soft);
@@ -422,7 +535,7 @@ body {
 
 .card .fix b { color: var(--gold); }
 
-/* ---------- 关于 ---------- */
+/* ---------- 多了解一点 ---------- */
 .about-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -439,7 +552,7 @@ body {
 .about-item h3 {
   color: var(--red);
   font-size: 1.1rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   margin-bottom: 0.55rem;
 }
 

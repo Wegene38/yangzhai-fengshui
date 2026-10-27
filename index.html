@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>阳宅风水 · 八宅命卦测算</title>
-  <meta name="description" content="阳宅风水在线工具:八宅命卦计算、宅向吉凶方位罗盘图、常见阳宅禁忌与化解方法。传统文化参考。" />
+  <title>阳宅风水入门 · 三步算出你的吉利方位</title>
+  <meta name="description" content="小白友好的阳宅风水入门工具:输入生日算出你的吉利方位,手机指南针看朝向,一张图看懂家里哪里适合放床、哪里适合放书桌。传统文化参考,请勿迷信。" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23a63c2a'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='%23f7f1e3'%3E%E5%AE%85%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -13,42 +13,75 @@
   <nav class="nav">
     <a class="brand" href="#home"><span class="brand-gua">☷</span>阳宅风水</a>
     <div class="nav-links">
-      <a href="#calc">命卦测算</a>
-      <a href="#house">宅向吉凶</a>
-      <a href="#knowledge">风水知识</a>
-      <a href="#about">关于</a>
+      <a href="#guide">新手指南</a>
+      <a href="#calc">算吉利方向</a>
+      <a href="#house">看家中方位</a>
+      <a href="#knowledge">禁忌化解</a>
     </div>
   </nav>
 
   <header class="hero" id="home">
     <div class="hero-gua" aria-hidden="true">☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷</div>
     <h1>阳宅风水</h1>
-    <p class="hero-sub">门 · 主 · 灶 三要 &nbsp;|&nbsp; 藏风聚气 · 背山面水</p>
+    <p class="hero-sub">零基础 · 30 秒上手 · 仅供娱乐参考</p>
     <p class="hero-desc">
-      以《八宅明镜》《阳宅三要》为据,测算你的命卦,<br class="mobile-hide" />
-      绘制东四、西四命吉凶方位图,了解传统居住文化中的方位之道。
+      输入生日,马上算出你的 4 个吉利方向;<br class="mobile-hide" />
+      用手机指南针选个朝向,一张图看懂家里哪里适合放床、哪里适合摆书桌。
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="#calc">开始测算命卦</a>
-      <a class="btn btn-ghost" href="#house">查看宅向吉凶</a>
+      <a class="btn btn-primary" href="#calc">算算我的吉利方向</a>
+      <a class="btn btn-ghost" href="#guide">第一次接触?先看指南</a>
     </div>
   </header>
 
   <main>
 
+    <!-- 新手指南 -->
+    <section id="guide" class="section">
+      <h2 class="section-title">新手 30 秒入门</h2>
+      <p class="section-intro">不用懂任何术语,跟着三步走:</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">① 🎂</div>
+          <h3>算命卦</h3>
+          <p>在下方输入<b>生日和性别</b>,点一下,得到 4 个属于你的吉利方向。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">② 🧭</div>
+          <h3>看朝向</h3>
+          <p>打开手机自带的「指南针」App,站在阳台或最亮的窗前看看朝哪,在「看家中方位」里选出来。</p>
+        </div>
+        <div class="step">
+          <div class="step-num">③ 🛠️</div>
+          <h3>巧布置</h3>
+          <p>照着方位图调整:<b>吉方留给卧室、书桌</b>,凶方交给厨房、卫生间、储物间。</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        💡 <b>先说清楚:</b>这是传统文化里的经验之谈,当作「住得更舒服」的小参考就好,别焦虑、别迷信。住得亮堂、通风、整齐,心情好,比什么方位都强。
+      </div>
+      <details class="glossary">
+        <summary>📖 看不懂名词?点开小词典</summary>
+        <div>
+          <p><b>命卦:</b>把你的出生年份换算成一个「卦」,代表你个人的方位偏好,分东四命、西四命两种。</p>
+          <p><b>东四命 / 西四命:</b>人分两组。东四命的吉方在<b>北、东、东南、南</b>;西四命在<b>西、西北、东北、西南</b>。</p>
+          <p><b>八宅:</b>把房子按坐向分成八种(坎宅、离宅……),每种房子的吉凶方位图不一样。</p>
+          <p><b>生气 / 延年 / 天医 / 伏位:</b>四个吉利方向的老名字,分别偏向事业、感情、健康、安稳。</p>
+          <p><b>绝命 / 五鬼 / 六煞 / 祸害:</b>四个不吉利方向的老名字,让床和大门离远一点就好。</p>
+        </div>
+      </details>
+    </section>
+
     <!-- 命卦测算 -->
-    <section id="calc" class="section">
-      <h2 class="section-title">命卦测算</h2>
-      <p class="section-intro">
-        依据出生日期与性别,按传统公式推算命卦,分为「东四命」与「西四命」。
-        东四命宜配坎、离、震、巽之宅;西四命宜配乾、坤、艮、兑之宅。
-      </p>
+    <section id="calc" class="section section-alt">
+      <h2 class="section-title">第 1 步 · 算算我的吉利方向</h2>
+      <p class="section-intro">填上生日、选好性别,点一下就行。算出来的「吉利方向」可以用来挑卧室、放床头、摆书桌。</p>
       <div class="calc-card">
         <form id="calc-form" class="calc-form">
           <div class="field">
             <label for="birthdate">出生日期</label>
             <input type="date" id="birthdate" name="birthdate" value="1990-06-15" required />
-            <small>以立春(约 2 月 4 日)为年份分界,近似处理。</small>
+            <small>大概日子就行;立春(2 月 4 日)前出生按上一年算。</small>
           </div>
           <div class="field">
             <label>性别</label>
@@ -64,21 +97,22 @@
           <div class="result-head">
             <div class="gua-badge"><span id="result-gua-symbol"></span><strong id="result-gua-name"></strong><em id="result-gua-trigram"></em></div>
             <div class="result-meta">
-              <p id="result-group"></p>
               <p id="result-year"></p>
             </div>
           </div>
+          <div class="plain-summary" id="result-summary"></div>
           <div class="result-body">
             <div class="result-compass" id="calc-compass"></div>
             <div class="result-lists">
               <div class="list-block good">
-                <h3>四吉方</h3>
+                <h3>✅ 四个吉利方向(多用)</h3>
                 <ul id="result-good"></ul>
               </div>
               <div class="list-block bad">
-                <h3>四凶方</h3>
+                <h3>🚫 四个不吉利方向(少待)</h3>
                 <ul id="result-bad"></ul>
               </div>
+              <p class="sleep-tip" id="result-sleep"></p>
             </div>
           </div>
         </div>
@@ -86,26 +120,33 @@
     </section>
 
     <!-- 宅向吉凶 -->
-    <section id="house" class="section section-alt">
-      <h2 class="section-title">宅向吉凶 · 八宅方位图</h2>
-      <p class="section-intro">
-        八宅法以房屋「坐山」定宅卦。选择你房屋的坐向,查看八方吉凶:
-        大门、主卧宜在吉方;厨房、卫生间宜压凶方,以制凶星。
-      </p>
+    <section id="house" class="section">
+      <h2 class="section-title">第 2 步 · 看看你家的吉凶方位</h2>
+      <p class="section-intro">选出你家阳台(或大门)的朝向,马上得到一张「哪里好、哪里不好」的方位图,和每个位置的摆放建议。</p>
+
+      <div class="howto">
+        <h3>🧭 怎么知道我家朝向?(30 秒)</h3>
+        <ol>
+          <li><b>最简单:</b>打开手机自带的「指南针」App,站在客厅最亮的窗/阳台前,面朝窗外读出方向(比如「南」),在下面选「朝南」。</li>
+          <li><b>传统方法:</b>站在大门里面、面朝门外,面朝的方向就是「朝向」。</li>
+          <li>记不住口诀没关系:<b>大窗/阳台在南边 = 朝南 = 「坐北朝南」</b>。</li>
+        </ol>
+      </div>
+
       <div class="house-card">
         <div class="house-control">
-          <label for="house-select">房屋坐向</label>
+          <label for="house-select">我家阳台 / 大门朝向</label>
           <select id="house-select">
-            <option value="坎" selected>坐北朝南(坎宅)</option>
-            <option value="艮">坐东北朝西南(艮宅)</option>
-            <option value="震">坐东朝西(震宅)</option>
-            <option value="巽">坐东南朝西北(巽宅)</option>
-            <option value="离">坐南朝北(离宅)</option>
-            <option value="坤">坐西南朝东北(坤宅)</option>
-            <option value="兑">坐西朝东(兑宅)</option>
-            <option value="乾">坐西北朝东南(乾宅)</option>
+            <option value="坎" selected>朝南(坐北朝南 · 坎宅)</option>
+            <option value="艮">朝西南(坐东北朝西南 · 艮宅)</option>
+            <option value="震">朝西(坐东朝西 · 震宅)</option>
+            <option value="巽">朝西北(坐东南朝西北 · 巽宅)</option>
+            <option value="离">朝北(坐南朝北 · 离宅)</option>
+            <option value="坤">朝东北(坐西南朝东北 · 坤宅)</option>
+            <option value="兑">朝东(坐西朝东 · 兑宅)</option>
+            <option value="乾">朝东南(坐西北朝东南 · 乾宅)</option>
           </select>
-          <small>现代住宅通常以主要采光面或大门定坐向,仅供参考。</small>
+          <small>现代住宅以主要采光面(最大的窗/阳台)为准,拿不准就按阳台方向选。</small>
         </div>
         <div class="house-body">
           <div id="house-compass" class="house-compass"></div>
@@ -113,98 +154,99 @@
             <h3 id="house-title"></h3>
             <ul id="house-advice-list"></ul>
             <div class="legend" id="house-legend"></div>
+            <p class="color-note">🔴 图中颜色越红越吉利,越灰黑越不利;颜色浅说明影响不大。</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 风水知识 -->
-    <section id="knowledge" class="section">
-      <h2 class="section-title">常见阳宅禁忌与化解</h2>
-      <p class="section-intro">传统阳宅讲究「藏风聚气、山环水抱、宅形方正」。以下为民间常论的形煞与化解之法,多以现代眼光理解采光、通风、动线与心理感受为宜。</p>
+    <section id="knowledge" class="section section-alt">
+      <h2 class="section-title">常见禁忌与化解</h2>
+      <p class="section-intro">这些名字听起来吓人,说白了都是生活中常见的小问题。每条都告诉你「怎么回事」和「怎么办」。</p>
       <div class="cards">
         <article class="card">
-          <h3>穿堂煞</h3>
-          <p>大门直对阳台或后门,气流直进直出,民间谓「不聚财」。</p>
-          <p class="fix"><b>化解:</b>入门设玄关、屏风或隔断柜,使气流转折缓行。</p>
+          <h3>🌬️ 穿堂煞</h3>
+          <p><b>怎么回事:</b>大门正对阳台或后门,风一吹直接穿屋而过。老话叫「不聚财」,其实是风大、没私密感。</p>
+          <p class="fix"><b>怎么办:</b>入门放个玄关柜、屏风,让气流拐个弯。</p>
         </article>
         <article class="card">
-          <h3>开门见灶</h3>
-          <p>古书云「开门见灶,钱财多耗」,灶为养命之源,不宜外露。</p>
-          <p class="fix"><b>化解:</b>设玄关遮挡,或将灶台移离正对大门之处。</p>
+          <h3>🔥 开门见灶</h3>
+          <p><b>怎么回事:</b>一进门就看见炉灶。古人说「钱财多耗」,实际主要是油烟和杂乱影响观感。</p>
+          <p class="fix"><b>怎么办:</b>加玄关遮挡,或把灶台挪离正对大门的位置。</p>
         </article>
         <article class="card">
-          <h3>横梁压顶</h3>
-          <p>床、沙发、书桌正上方有横梁,压迫感重,久处心神不宁。</p>
-          <p class="fix"><b>化解:</b>吊顶包梁,或移开床、桌避开横梁正下方。</p>
+          <h3>🪨 横梁压顶</h3>
+          <p><b>怎么回事:</b>床、沙发、书桌正上方有横梁,人容易有压迫感、睡不踏实。</p>
+          <p class="fix"><b>怎么办:</b>吊顶把梁包起来,或挪开床位、桌位避开。</p>
         </article>
         <article class="card">
-          <h3>门门相对</h3>
-          <p>两门正对,气流互冲,民间谓易生口舌是非。</p>
-          <p class="fix"><b>化解:</b>常闭其一,挂门帘,或改移门位。</p>
+          <h3>🚪 门门相对</h3>
+          <p><b>怎么回事:</b>两扇门正对着,气流互冲、私密性差,总觉得「被看到」。</p>
+          <p class="fix"><b>怎么办:</b>随手关门、挂个门帘,或错开改成斜开门。</p>
         </article>
         <article class="card">
-          <h3>卫生间居中</h3>
-          <p>住宅中宫宜静宜净,厕居中央,湿秽聚而不散。</p>
-          <p class="fix"><b>化解:</b>保持干燥通风、常闭门,可置绿植、排风扇。</p>
+          <h3>🚽 卫生间居中</h3>
+          <p><b>怎么回事:</b>卫生间在房子正中央,潮气和异味散得慢,影响全屋。</p>
+          <p class="fix"><b>怎么办:</b>保持干燥通风、常闭门,放点绿植、装排风扇。</p>
         </article>
         <article class="card">
-          <h3>炉灶对水</h3>
-          <p>灶台正对水槽、冰箱,水火相冲,传统认为不利家宅。</p>
-          <p class="fix"><b>化解:</b>调整灶位或水槽位置,中间以台面隔开。</p>
+          <h3>💧 炉灶对水槽</h3>
+          <p><b>怎么回事:</b>灶台正对水槽或冰箱,「水火相冲」,实际用起来也容易溅水、碍手。</p>
+          <p class="fix"><b>怎么办:</b>中间隔出台面,或挪开其中一个的位置。</p>
         </article>
         <article class="card">
-          <h3>床头无靠</h3>
-          <p>床头悬空或靠窗,缺乏依托感,睡眠不安。</p>
-          <p class="fix"><b>化解:</b>床头靠实墙,加设床头板,避开窗下。</p>
+          <h3>🛏️ 床头无靠</h3>
+          <p><b>怎么回事:</b>床头悬空或靠窗,背后没有依托,睡觉容易不安稳。</p>
+          <p class="fix"><b>怎么办:</b>床头靠实墙、加个床头板,别放在窗下。</p>
         </article>
         <article class="card">
-          <h3>镜子对床</h3>
-          <p>夜间镜面反光、影像易扰睡眠,惊悸不安。</p>
-          <p class="fix"><b>化解:</b>移开镜子或加装布帘,选衣柜内藏式镜。</p>
+          <h3>🪞 镜子对床</h3>
+          <p><b>怎么回事:</b>半夜起身看到镜中影子,容易被吓到,光线反射也扰眠。</p>
+          <p class="fix"><b>怎么办:</b>镜子挪开或加布帘,选柜门内藏的镜子。</p>
         </article>
         <article class="card">
-          <h3>尖角冲射</h3>
-          <p>墙角、柱角、家具尖角正冲坐卧之处,形如利刃。</p>
-          <p class="fix"><b>化解:</b>绿植、屏风缓冲遮挡,选用圆角家具。</p>
+          <h3>📐 尖角冲射</h3>
+          <p><b>怎么回事:</b>墙角、柜角正对着床或沙发,看着不舒服,磕碰也危险。</p>
+          <p class="fix"><b>怎么办:</b>绿植、屏风挡一下,尽量选圆角家具。</p>
         </article>
         <article class="card">
-          <h3>天斩煞</h3>
-          <p>两栋高楼之间的狭窄缝隙正对门窗,如刀劈之势,强风穿行。</p>
-          <p class="fix"><b>化解:</b>常闭窗帘,窗台置绿植缓冲气流。</p>
+          <h3>🏙️ 天斩煞</h3>
+          <p><b>怎么回事:</b>窗外正对两栋高楼之间的窄缝,强风灌入、噪音也大。</p>
+          <p class="fix"><b>怎么办:</b>常关窗帘,窗台摆绿植缓冲气流。</p>
         </article>
         <article class="card">
-          <h3>反弓煞</h3>
-          <p>道路或河流外弯反弓一侧,气流离心而去,传统谓不吉。</p>
-          <p class="fix"><b>化解:</b>阳台窗台置绿植缓冲,加厚窗帘隔音。</p>
+          <h3>🛣️ 反弓煞</h3>
+          <p><b>怎么回事:</b>楼下的路或河像弓背一样「弯出去」正对你,车流噪音、灯光直冲。</p>
+          <p class="fix"><b>怎么办:</b>加厚窗帘、阳台摆绿植缓冲。</p>
         </article>
         <article class="card">
-          <h3>藏风聚气</h3>
-          <p>阳宅总纲:户型方正、明堂开阔、采光充足、通风良好。</p>
-          <p class="fix"><b>现代解读:</b>即良好的日照、通风、动线与安全感。</p>
+          <h3>🏡 藏风聚气(总原则)</h3>
+          <p><b>怎么回事:</b>好房子的共同点:户型方正、采光好、通风好、进门有玄关不一眼望到底。</p>
+          <p class="fix"><b>说白了:</b>住得亮堂、整齐、有安全感,就是好风水。</p>
         </article>
       </div>
     </section>
 
-    <!-- 关于 -->
-    <section id="about" class="section section-alt">
-      <h2 class="section-title">关于阳宅风水</h2>
+    <!-- 多了解一点 -->
+    <section id="about" class="section">
+      <h2 class="section-title">多了解一点</h2>
       <div class="about-grid">
         <div class="about-item">
-          <h3>何为阳宅</h3>
-          <p>风水学将生者居住的宅院称「阳宅」,与「阴宅」(墓地)相对。阳宅风水讲究择址、朝向、布局与陈设,追求人与居所环境的和谐,代表典籍有《阳宅三要》《八宅明镜》《阳宅十书》等。</p>
+          <h3>阳宅风水是什么?</h3>
+          <p>「阳宅」就是活人住的房子(和墓地「阴宅」相对)。阳宅风水,简单说就是古人挑房子、布置房间的经验总结:哪里采光好、哪里通风、床放哪睡得踏实。代表典籍有《阳宅三要》《八宅明镜》。</p>
         </div>
         <div class="about-item">
-          <h3>阳宅三要</h3>
-          <p>「门、主、灶」为阳宅三要:大门纳气之口,主房(卧室)安身之处,灶房养生之所。三者方位配合命卦吉凶,为八宅法判断住宅的纲领。</p>
+          <h3>门、主、灶三要</h3>
+          <p>古人看房子主要看三处:大门(每天进出)、卧室(睡得好不好)、厨房(吃得健不健康)。本站给出的建议,也都是围绕这三处展开的。</p>
         </div>
         <div class="about-item">
-          <h3>东四西四</h3>
-          <p>八宅法将人命分为东四命(坎离震巽)与西四命(乾坤艮兑)。东四命者宜居东四宅,西四命者宜居西四宅,再于宅内按吉凶方位布置门、床、灶。</p>
+          <h3>东四命 / 西四命</h3>
+          <p>把人按出生年分成两组:东四命的人吉方在东、东南、南、北;西四命的人在西、西北、东北、西南。吉方和房子朝向对上了,住着就「合拍」。</p>
         </div>
         <div class="about-item">
-          <h3>理性看待</h3>
-          <p>风水是中国传统环境选择经验的总结,其中许多原则与现代建筑学的采光、通风、人因工程相通。本站内容为传统文化展示与趣味参考,请勿迷信,重大决策请以科学判断为准。</p>
+          <h3>请理性看待</h3>
+          <p>风水是传统文化和经验的混合体,很多内容与现代建筑的采光、通风、动线设计相通。把它当作「住得更舒服」的参考就好;买房装修等大事,请以科学和专业人士的意见为准。</p>
         </div>
       </div>
     </section>
