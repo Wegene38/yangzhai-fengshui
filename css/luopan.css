@@ -1,0 +1,253 @@
+/* ========== 阳宅罗盘 · 布局工具 ========== */
+:root {
+  --paper: #f7f3e8;
+  --paper-deep: #efe8d6;
+  --ink: #2b2620;
+  --ink-soft: #5c5346;
+  --red: #a63c2a;
+  --red-deep: #7e2a1d;
+  --gold: #b8860b;
+  --gold-soft: #d4af37;
+  --gold-bg: #faf3dd;
+  --gold-line: #e5d5a1;
+  --line: #ddd3bd;
+  --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Source Han Serif SC", serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--serif);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ---------- 顶栏 ---------- */
+.app-top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.2rem;
+  background: linear-gradient(150deg, var(--red), var(--red-deep));
+  color: #f7f1e3;
+  box-shadow: 0 2px 12px rgba(126, 42, 29, 0.3);
+}
+
+.app-top .back {
+  color: rgba(247, 241, 227, 0.85);
+  text-decoration: none;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.app-top .back:hover { color: #fff; }
+
+.app-title { font-weight: 700; letter-spacing: 0.1em; font-size: 1.02rem; text-align: center; }
+
+/* ---------- 主体 ---------- */
+.app-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.4rem 1rem 2.5rem;
+}
+
+.app-card {
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.6rem 1.4rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 8px 30px rgba(43, 38, 32, 0.07);
+}
+
+.app-h2 {
+  font-size: 1.15rem;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  margin-bottom: 1.1rem;
+  text-align: center;
+}
+
+.app-hint {
+  margin-top: 1.1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+}
+
+/* ---------- 罗盘 ---------- */
+.dial-wrap {
+  display: flex;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#dial {
+  width: min(340px, 82vw);
+  height: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+#dial:active { cursor: grabbing; }
+
+/* ---------- 读数 ---------- */
+.readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 1.2rem 0 1rem;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  flex-wrap: wrap;
+}
+
+.readout-item b { color: var(--red-deep); font-size: 1.25rem; margin-left: 0.15rem; }
+.readout-sep { color: var(--line); }
+
+.readout-item.gua b {
+  background: linear-gradient(150deg, var(--red), var(--red-deep));
+  color: #f7f1e3;
+  font-size: 1.1rem;
+  padding: 0.15rem 0.8rem;
+  border-radius: 6px;
+}
+
+/* ---------- 方向按钮 ---------- */
+.dir-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.dir-grid button {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  padding: 0.55rem 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dir-grid button:hover { border-color: var(--gold); }
+
+.dir-grid button.active {
+  background: var(--red);
+  border-color: var(--red-deep);
+  color: #f7f1e3;
+  font-weight: 700;
+}
+
+/* ---------- 布局图 ---------- */
+.layout-hint {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+.layout-hint b { color: var(--red-deep); }
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  max-width: 430px;
+  margin: 0 auto 1.2rem;
+}
+
+.layout-grid .cell {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 10px;
+  color: #f7f1e3;
+  font-family: var(--serif);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.layout-grid .cell:hover { transform: scale(1.04); }
+
+.layout-grid .cell.active {
+  box-shadow: inset 0 0 0 3px #f7f1e3, 0 4px 14px rgba(43, 38, 32, 0.25);
+  transform: scale(1.04);
+}
+
+.layout-grid .cell.door {
+  box-shadow: inset 0 0 0 3px var(--gold-soft);
+}
+
+.layout-grid .cell.door.active {
+  box-shadow: inset 0 0 0 3px var(--gold-soft), inset 0 0 0 5px #f7f1e3;
+}
+
+.cell-room { font-weight: 700; font-size: 0.98rem; }
+.cell-star { font-size: 0.72rem; opacity: 0.92; }
+.cell-dir { font-size: 0.68rem; opacity: 0.75; }
+
+.room-detail {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  min-height: 6.2rem;
+  font-size: 0.95rem;
+}
+
+.room-detail h4 { color: var(--red-deep); margin-bottom: 0.3rem; font-size: 1.02rem; }
+.room-detail p { margin-bottom: 0.3rem; }
+.room-detail .detail-tip { color: var(--ink-soft); font-size: 0.9rem; }
+.room-detail .detail-placeholder { color: var(--ink-soft); text-align: center; padding-top: 1.6rem; }
+
+.layout-tips {
+  list-style: none;
+  margin-top: 1.2rem;
+  border-top: 1px dashed var(--line);
+  padding-top: 1rem;
+}
+
+.layout-tips li {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  padding: 0.25rem 0;
+}
+
+.layout-tips li b { color: var(--ink); }
+
+.app-footer {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  padding: 0.5rem 0 1rem;
+}
+
+.app-footer a { color: var(--red); }
+
+@media (max-width: 480px) {
+  .app-card { padding: 1.2rem 1rem; }
+  .cell-room { font-size: 0.85rem; }
+  .cell-star { font-size: 0.64rem; }
+  .dir-grid button { font-size: 0.85rem; }
+}

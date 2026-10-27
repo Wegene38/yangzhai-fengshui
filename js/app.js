@@ -1,4 +1,4 @@
-/* ========== 阳宅风水 · 八宅测算 ========== */
+/* ========== 阳宅风水 · 命卦测算 ========== */
 
 // 八方顺序(顺时针,北在上)
 const DIRECTIONS = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
@@ -35,12 +35,6 @@ const EAST_FOUR = ['坎', '离', '震', '巽'];
 const GROUP_DIRS = {
   '东四命': ['北', '东', '东南', '南'],
   '西四命': ['西', '西北', '东北', '西南'],
-};
-
-// 坐向叫法(用于宅向图标题)
-const SIT_LABEL = {
-  '坎': '坐北朝南', '艮': '坐东北朝西南', '震': '坐东朝西', '巽': '坐东南朝西北',
-  '离': '坐南朝北', '坤': '坐西南朝东北', '兑': '坐西朝东', '乾': '坐西北朝东南',
 };
 
 /* ---------- 命卦计算 ---------- */
@@ -97,13 +91,6 @@ function renderCompass(container, gua) {
     </svg>`;
 }
 
-function renderLegend(container) {
-  container.innerHTML = Object.keys(STARS).map(name => {
-    const s = STARS[name];
-    return `<span class="chip"><span class="dot" style="background:${s.color}"></span>${name}·${s.level}</span>`;
-  }).join('');
-}
-
 /* ---------- 命卦测算交互 ---------- */
 function starListHtml(names, gua) {
   return names.map(name => {
@@ -147,31 +134,5 @@ document.getElementById('calc-form').addEventListener('submit', function (e) {
   document.getElementById('calc-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 
-/* ---------- 宅向吉凶交互 ---------- */
-function dirOf(gua, star) {
-  return DIRECTIONS[HOUSES[gua].indexOf(star)];
-}
-
-function renderHouse(gua) {
-  document.getElementById('house-title').textContent = `${SIT_LABEL[gua]} · ${gua}宅方位图`;
-  const items = [
-    ['🚪 大门 / 进门处', `开在 <em>${dirOf(gua, '生气')}</em>(生气)或 <em>${dirOf(gua, '延年')}</em>(延年)最好,进门就带好运`],
-    ['🛏️ 主卧', `放在 <em>${dirOf(gua, '生气')}</em>、<em>${dirOf(gua, '延年')}</em> 或 <em>${dirOf(gua, '天医')}</em>,睡在吉方休息更好`],
-    ['📚 书桌 / 办公桌', `摆在 <em>${dirOf(gua, '伏位')}</em> 或 <em>${dirOf(gua, '生气')}</em>,学习工作更专注`],
-    ['🍳 厨房', `放在 ${dirOf(gua, '祸害')}、${dirOf(gua, '六煞')} 这样的凶方反而好,让「火」压住晦气`],
-    ['🚽 卫生间', `放在 ${dirOf(gua, '五鬼')}、${dirOf(gua, '绝命')} 正合适,把家里最不利的位置给它`],
-    ['⚠️ 特别注意', `<em>${dirOf(gua, '绝命')}</em>、<em>${dirOf(gua, '五鬼')}</em> 尽量别当主卧和大门;改不了的话,保持明亮整洁、常通风即可,不必焦虑`],
-  ];
-  document.getElementById('house-advice-list').innerHTML =
-    items.map(([k, v]) => `<li><b>${k}</b>${v}</li>`).join('');
-  renderCompass(document.getElementById('house-compass'), gua);
-}
-
-document.getElementById('house-select').addEventListener('change', function () {
-  renderHouse(this.value);
-});
-
 /* ---------- 初始化 ---------- */
-renderHouse('坎');
-renderLegend(document.getElementById('house-legend'));
 document.getElementById('footer-year').textContent = new Date().getFullYear();

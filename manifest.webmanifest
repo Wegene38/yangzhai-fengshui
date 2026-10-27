@@ -1,0 +1,17 @@
+{
+  "name": "阳宅罗盘 · 布局工具",
+  "short_name": "阳宅罗盘",
+  "description": "转动罗盘选朝向,生成阳宅九宫格布局建议。传统文化参考。",
+  "start_url": "luopan.html",
+  "display": "standalone",
+  "background_color": "#f7f3e8",
+  "theme_color": "#a63c2a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

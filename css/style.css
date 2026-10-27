@@ -61,6 +61,45 @@ body {
 
 .nav-links a:hover { color: var(--red); }
 
+.nav-links a.nav-app {
+  color: var(--red);
+  font-weight: 700;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 6px;
+  padding: 0.15rem 0.6rem;
+}
+
+.nav-links a.nav-app:hover { background: var(--gold-soft); color: #fff; }
+
+/* ---------- 罗盘工具推广卡 ---------- */
+.app-promo {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  background: linear-gradient(150deg, #fffdf7, var(--gold-bg));
+  border: 1px solid var(--gold-line);
+  border-radius: 14px;
+  padding: 2.4rem 2rem;
+  box-shadow: 0 8px 30px rgba(43, 38, 32, 0.07);
+}
+
+.app-promo-icon { font-size: 3rem; margin-bottom: 0.6rem; }
+
+.app-promo h3 {
+  color: var(--red);
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.7rem;
+}
+
+.app-promo p {
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  max-width: 540px;
+  margin: 0 auto 1.6rem;
+}
+
 @media (max-width: 640px) {
   .nav { flex-direction: column; gap: 0.35rem; }
   .nav-links a { margin: 0 0.55rem; }

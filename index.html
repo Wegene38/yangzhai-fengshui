@@ -6,6 +6,8 @@
   <title>阳宅风水入门 · 三步算出你的吉利方位</title>
   <meta name="description" content="小白友好的阳宅风水入门工具:输入生日算出你的吉利方位,手机指南针看朝向,一张图看懂家里哪里适合放床、哪里适合放书桌。传统文化参考,请勿迷信。" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23a63c2a'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='%23f7f1e3'%3E%E5%AE%85%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#a63c2a" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -17,6 +19,7 @@
       <a href="#calc">算吉利方向</a>
       <a href="#house">看家中方位</a>
       <a href="#knowledge">禁忌化解</a>
+      <a class="nav-app" href="luopan.html">🧭 罗盘工具</a>
     </div>
   </nav>
 
@@ -119,44 +122,25 @@
       </div>
     </section>
 
-    <!-- 宅向吉凶 -->
+    <!-- 罗盘工具入口 -->
     <section id="house" class="section">
-      <h2 class="section-title">第 2 步 · 看看你家的吉凶方位</h2>
-      <p class="section-intro">选出你家阳台(或大门)的朝向,马上得到一张「哪里好、哪里不好」的方位图,和每个位置的摆放建议。</p>
+      <h2 class="section-title">第 2 步 · 罗盘布局工具</h2>
+      <p class="section-intro">像转动真罗盘一样选出你家朝向,马上得到一张九宫格布局图:主卧放哪、厨房卫生间放哪,点一点格子就看懂。</p>
 
       <div class="howto">
         <h3>🧭 怎么知道我家朝向?(30 秒)</h3>
         <ol>
-          <li><b>最简单:</b>打开手机自带的「指南针」App,站在客厅最亮的窗/阳台前,面朝窗外读出方向(比如「南」),在下面选「朝南」。</li>
+          <li><b>最简单:</b>打开手机自带的「指南针」App,站在客厅最亮的窗/阳台前,面朝窗外读出方向(比如「南」)。</li>
           <li><b>传统方法:</b>站在大门里面、面朝门外,面朝的方向就是「朝向」。</li>
           <li>记不住口诀没关系:<b>大窗/阳台在南边 = 朝南 = 「坐北朝南」</b>。</li>
         </ol>
       </div>
 
-      <div class="house-card">
-        <div class="house-control">
-          <label for="house-select">我家阳台 / 大门朝向</label>
-          <select id="house-select">
-            <option value="坎" selected>朝南(坐北朝南 · 坎宅)</option>
-            <option value="艮">朝西南(坐东北朝西南 · 艮宅)</option>
-            <option value="震">朝西(坐东朝西 · 震宅)</option>
-            <option value="巽">朝西北(坐东南朝西北 · 巽宅)</option>
-            <option value="离">朝北(坐南朝北 · 离宅)</option>
-            <option value="坤">朝东北(坐西南朝东北 · 坤宅)</option>
-            <option value="兑">朝东(坐西朝东 · 兑宅)</option>
-            <option value="乾">朝东南(坐西北朝东南 · 乾宅)</option>
-          </select>
-          <small>现代住宅以主要采光面(最大的窗/阳台)为准,拿不准就按阳台方向选。</small>
-        </div>
-        <div class="house-body">
-          <div id="house-compass" class="house-compass"></div>
-          <div class="house-advice">
-            <h3 id="house-title"></h3>
-            <ul id="house-advice-list"></ul>
-            <div class="legend" id="house-legend"></div>
-            <p class="color-note">🔴 图中颜色越红越吉利,越灰黑越不利;颜色浅说明影响不大。</p>
-          </div>
-        </div>
+      <div class="app-promo">
+        <div class="app-promo-icon">🧭</div>
+        <h3>阳宅罗盘 · 布局工具</h3>
+        <p>直接拖动罗盘(或点方向按钮)选出朝向,自动生成「专属九宫格布局图」:吉方留给主卧、儿童房、书房,凶方交给厨房、卫生间、储物间。每个格子都能点开看原因。</p>
+        <a class="btn btn-primary" href="luopan.html">打开罗盘布局工具 →</a>
       </div>
     </section>
 

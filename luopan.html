@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>阳宅罗盘 · 选朝向看布局</title>
+  <meta name="description" content="像转动真罗盘一样选择你家朝向,自动生成九宫格布局建议:主卧放哪、厨房卫生间放哪,点一点就看懂。传统文化参考,请勿迷信。" />
+  <meta name="theme-color" content="#a63c2a" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23a63c2a'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='%23f7f1e3'%3E%E7%BD%97%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="css/luopan.css" />
+</head>
+<body>
+
+  <header class="app-top">
+    <a class="back" href="index.html">← 返回首页</a>
+    <div class="app-title">🧭 阳宅罗盘 · 布局工具</div>
+  </header>
+
+  <main class="app-main">
+
+    <!-- 第 1 步:转罗盘 -->
+    <section class="app-card">
+      <h2 class="app-h2">① 转动罗盘,选你家大门 / 阳台的朝向</h2>
+      <div class="dial-wrap" id="dial-wrap">
+        <svg id="dial" viewBox="0 0 340 340" aria-label="阳宅罗盘,拖动选择朝向"></svg>
+      </div>
+
+      <div class="readout">
+        <span class="readout-item">朝向 <b id="facing">南</b></span>
+        <span class="readout-sep">·</span>
+        <span class="readout-item">坐向 <b id="sitting">北</b></span>
+        <span class="readout-sep">·</span>
+        <span class="readout-item gua"><b id="gua-name">坎宅</b></span>
+      </div>
+
+      <div class="dir-grid" id="dir-grid"></div>
+
+      <p class="app-hint">
+        🧭 不知道朝向?打开手机自带的「指南针」App,站在阳台面朝窗外读出方向(比如「南」),
+        再点上面按钮或直接拖动罗盘。把你家想象成一个方块,让「大门」那条边对准朝向就行。
+      </p>
+    </section>
+
+    <!-- 第 2 步:布局建议 -->
+    <section class="app-card">
+      <h2 class="app-h2">② 你的专属布局图:<span id="layout-title"></span></h2>
+      <p class="layout-hint">一格一个方位,<b>点任意格子看「为什么这样放」</b>。</p>
+      <div class="layout-grid" id="layout-grid"></div>
+      <div class="room-detail" id="room-detail">
+        <p class="detail-placeholder">👆 点一下上面的格子,看摆放原因和小技巧。</p>
+      </div>
+      <ul class="layout-tips">
+        <li>🔴 红 / 金格子是<b>吉方</b>,留给卧室、书房;灰黑格子是<b>凶方</b>,交给厨房、卫生间、储物间。</li>
+        <li>🚪 大门在朝向处:落在吉方锦上添花;落在凶方别慌,做个玄关屏风缓冲、保持门口整洁明亮,就能化解大半。</li>
+        <li>🛏️ 床头尽量靠吉方的那面墙,睡得更踏实。</li>
+        <li>⚠️ 传统文化参考,仅供娱乐;住得亮堂、通风、整齐,比什么方位都强。</li>
+      </ul>
+    </section>
+
+    <p class="app-footer">内容源自传统民俗文化,仅供参考娱乐,请勿迷信 · <a href="index.html">阳宅风水首页</a></p>
+  </main>
+
+  <script src="js/luopan.js"></script>
+</body>
+</html>
