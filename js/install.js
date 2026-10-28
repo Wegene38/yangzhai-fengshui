@@ -1,4 +1,26 @@
 /* ========== 安装到桌面 / 主屏幕 ========== */
+
+/* ---------- 样式自修复:检测到 CSS 未生效时清理旧缓存并刷新一次 ---------- */
+(function () {
+  try {
+    if (sessionStorage.getItem('yz_repaired')) return;
+    const bar = document.querySelector('.nav, .app-top');
+    if (!bar) return;
+    // 主题 CSS 生效时,顶栏必为 sticky;否则说明样式没加载(SW 旧缓存/网络失败)
+    if (getComputedStyle(bar).position === 'sticky') return;
+    sessionStorage.setItem('yz_repaired', '1');
+    (async () => {
+      try {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) await r.unregister();
+        const keys = await caches.keys();
+        for (const k of keys) await caches.delete(k);
+      } catch (e) { /* ignore */ }
+      location.reload();
+    })();
+  } catch (e) { /* ignore */ }
+})();
+
 (function () {
   let deferredPrompt = null;
 
