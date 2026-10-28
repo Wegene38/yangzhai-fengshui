@@ -117,30 +117,13 @@ function renderStage() {
     img.className = 'plan-img';
     img.src = plan.img;
     img.alt = '户型图';
+    // 图片加载会撑高舞台,加载完后重算指北针尺寸
+    img.addEventListener('load', () => renderStage());
     stage.appendChild(img);
     roseSvg = null;
   }
 
-  // 方向环
-  const w = stage.clientWidth, h = stage.clientHeight;
-  if (!roseSvg) {
-    roseSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    roseSvg.id = 'rose';
-    stage.appendChild(roseSvg);
-  }
-  roseSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-  const cx = plan.cx / 100 * w, cy = plan.cy / 100 * h;
-  const R = Math.min(w, h) * 0.36;
-  let g = `<g opacity="0.8">`;
-  for (let i = 0; i < 8; i++) {
-    const a = (i * 45 - plan.north - 90) * Math.PI / 180;
-    g += `<line x1="${cx}" y1="${cy}" x2="${(cx + R * Math.cos(a)).toFixed(1)}" y2="${(cy + R * Math.sin(a)).toFixed(1)}" stroke="#b8860b" stroke-width="1" stroke-dasharray="2 5"/>`;
-    const la = (i * 45 - plan.north - 90) * Math.PI / 180;
-    const lx = cx + (R + 16) * Math.cos(la), ly = cy + (R + 16) * Math.sin(la);
-    g += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" font-size="13" font-weight="700" fill="${DIRECTIONS[i] === '北' ? '#a63c2a' : '#8a7a5c'}" text-anchor="middle">${DIRECTIONS[i]}</text>`;
-  }
-  g += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${R.toFixed(1)}" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="4 5"/></g>`;
-  roseSvg.innerHTML = g;
+  renderRose();
 
   // 中心点
   let dot = stage.querySelector('#center-dot');
@@ -167,6 +150,61 @@ function renderStage() {
   });
 
   renderMarkList();
+}
+
+// ---------- 指北针(随图片尺寸自适应,带背盘便于阅读) ----------
+function renderRose() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  if (!w || !h) return;
+  if (!roseSvg) {
+    roseSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    roseSvg.id = 'rose';
+    stage.appendChild(roseSvg);
+  }
+  roseSvg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  const cx = plan.cx / 100 * w, cy = plan.cy / 100 * h;
+  const R = Math.min(w, h) * 0.34;
+  const pt = (r, deg) => {
+    const a = (deg - 90) * Math.PI / 180;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  };
+
+  let g = '';
+  // 半透明背盘:压住复杂的户型图底色,指北针在任何图上都清晰
+  g += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="rgba(255,253,247,0.85)" stroke="#b8860b" stroke-width="2.5"/>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="${(R * 0.62).toFixed(1)}" fill="none" stroke="rgba(184,134,11,.5)" stroke-width="1" stroke-dasharray="3 5"/>`;
+  // 八方位分隔线
+  for (let i = 0; i < 8; i++) {
+    const a = i * 45 - plan.north;
+    const [x1, y1] = pt(R * 0.2, a);
+    const [x2, y2] = pt(R * 0.98, a);
+    g += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(166,60,42,.3)" stroke-width="1"/>`;
+  }
+  // 方位文字(白描边大字,任何底色都看得清)
+  const fs = Math.max(14, R * 0.13);
+  DIRECTIONS.forEach((dir, i) => {
+    const a = i * 45 - plan.north;
+    const [lx, ly] = pt(R * 0.8, a);
+    const isN = dir === '北';
+    g += `<text x="${lx.toFixed(1)}" y="${(ly + fs * 0.35).toFixed(1)}" font-size="${fs.toFixed(1)}" font-weight="700" fill="${isN ? '#a63c2a' : '#5c5346'}" stroke="#fffdf7" stroke-width="${(fs * 0.28).toFixed(1)}" paint-order="stroke" text-anchor="middle">${dir}</text>`;
+  });
+  // 红色指北箭头(细针形,贴外环,随北向旋钮转动)
+  const na = -plan.north;
+  const [tx, ty] = pt(R * 0.99, na);
+  const [bx, by] = pt(R * 0.72, na);
+  const [lx2, ly2] = pt(R * 0.74, na + 7);
+  const [rx2, ry2] = pt(R * 0.74, na - 7);
+  g += `<polygon points="${tx.toFixed(1)},${ty.toFixed(1)} ${lx2.toFixed(1)},${ly2.toFixed(1)} ${bx.toFixed(1)},${by.toFixed(1)} ${rx2.toFixed(1)},${ry2.toFixed(1)}" fill="#a63c2a" stroke="#fffdf7" stroke-width="1.5"/>`;
+  // 中心小十字
+  g += `<circle cx="${cx}" cy="${cy}" r="3" fill="#a63c2a"/>`;
+  roseSvg.innerHTML = g;
+}
+
+// 图片加载、窗口缩放、容器尺寸变化时都重算指北针
+if ('ResizeObserver' in window) {
+  new ResizeObserver(() => { if (plan.img) renderRose(); }).observe(stage);
+} else {
+  window.addEventListener('resize', () => { if (plan.img) renderRose(); });
 }
 
 function renderMarkList() {
