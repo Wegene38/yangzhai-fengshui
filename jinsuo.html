@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>金锁玉关分析 · 八方砂水</title>
+  <meta name="description" content="金锁玉关派(过路阴阳)阳宅分析:八方逐个标注砂(高)与水(低),按「一二三四要砂、六七八九要水」口诀实时评分并给人造砂水建议。" />
+  <meta name="theme-color" content="#a63c2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/luopan.css" />
+  <link rel="stylesheet" href="css/schools.css" />
+</head>
+<body>
+
+  <header class="app-top">
+    <a class="back" href="index.html">← 选门派</a>
+    <div class="app-title">🔒 金锁玉关 · 砂水分析</div>
+    <button class="install-btn top-install" type="button">📥 安装</button>
+  </header>
+
+  <main class="app-main">
+
+    <section class="app-card">
+      <h2 class="app-h2">金锁玉关是什么?</h2>
+      <p class="app-hint" style="margin-top:0">
+        又称「过路阴阳」,断法直截了当:站在家里八方看高低。
+        口诀「<b>一二十四要砂,六七八九要水</b>」——
+        <b>北、西南、东、东南宜高(砂)</b>,<b>西北、西、东北、南宜低(水)</b>。
+        砂 = 高大实体:楼、山、高柜、实墙;水 = 低洼流动:路、门、窗、河、开阔地。
+      </p>
+    </section>
+
+    <!-- ① 八方标注 -->
+    <section class="app-card">
+      <h2 class="app-h2">① 站在家里中心,八方各是什么?</h2>
+      <div id="js-rows"></div>
+      <p class="app-hint">💡 已经在 <a href="upload.html" style="color:#a63c2a">📐 户型图标注</a> 里标过「砂/水/高楼/道路」?这里已<b>自动预填</b>,可再手动调整。</p>
+    </section>
+
+    <!-- ② 报告 -->
+    <section class="app-card" id="report">
+      <h2 class="app-h2">② 金锁玉关评分报告</h2>
+      <div id="js-report"></div>
+    </section>
+
+    <p class="app-footer">砂水断法为传统口诀,实为对「藏风聚气、挡北风、纳南光」的经验总结 · <a href="index.html">选别的门派</a></p>
+  </main>
+
+  <script src="js/jinsuo.js"></script>
+  <script src="js/install.js"></script>
+  <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js'));</script>
+</body>
+</html>

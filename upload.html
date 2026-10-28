@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>户型图标注 · 四派通用</title>
+  <meta name="description" content="上传自己的户型平面图,定立极点与指北方向,标记房间与环境,八宅、峦头、玄空、金锁四个门派自动读取分析。" />
+  <meta name="theme-color" content="#a63c2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/luopan.css" />
+  <link rel="stylesheet" href="css/schools.css" />
+</head>
+<body>
+
+  <header class="app-top">
+    <a class="back" href="index.html">← 返回首页</a>
+    <div class="app-title">📐 户型图标注</div>
+    <button class="install-btn top-install" type="button">📥 安装</button>
+  </header>
+
+  <main class="app-main">
+
+    <section class="app-card">
+      <h2 class="app-h2">① 上传户型图(照片 / 截图都行)</h2>
+      <div class="plan-controls">
+        <label class="btn btn-primary" style="padding:.5rem 1.2rem">📁 选择图片
+          <input type="file" id="file" accept="image/*" hidden />
+        </label>
+        <button class="btn btn-ghost" id="clear-btn" type="button" style="color:#7e2a1d;border-color:#7e2a1d">🗑 清空重来</button>
+      </div>
+      <p class="app-hint">图片只在你手机/电脑本地处理,<b>不会上传到任何服务器</b>。标注结果保存在本机浏览器里。</p>
+    </section>
+
+    <section class="app-card">
+      <h2 class="app-h2">② 定中心和北向,再点图标注</h2>
+
+      <div class="plan-controls">
+        <label>指北旋钮
+          <input type="range" id="north" min="0" max="355" step="5" value="0" />
+          <b id="north-val">0°</b>
+        </label>
+        <small style="color:var(--ink-soft)">户型图一般「上北下南」;如果你的图不是,拖动旋钮让红色 N 对准真正的北方。</small>
+      </div>
+
+      <div class="stage-wrap">
+        <div id="stage">
+          <div class="stage-empty" id="stage-empty">
+            <span style="font-size:2.2rem">📐</span>
+            <span>还没有户型图<br/>先在上面选择一张图片</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette" id="palette"></div>
+
+      <div class="mark-list" id="mark-list"></div>
+
+      <p class="app-hint">
+        👆 <b>先在下面选一个标记类型,再点图上位置放置。</b>
+        中心红点是「立极点」(家的中心,一般在全屋几何中心),按住可拖动;
+        每个标记也都可以按住拖动;圈里的方向环会随北向旋钮转动。
+      </p>
+    </section>
+
+    <section class="app-card">
+      <h2 class="app-h2">③ 标好了?去各门派分析(自动读取)</h2>
+      <div class="plan-actions">
+        <a class="btn btn-primary" href="luopan.html#plan-result">🧭 八宅派分析</a>
+        <a class="btn btn-primary" href="luantou.html#report">⛰️ 峦头派分析</a>
+        <a class="btn btn-primary" href="xuankong.html#plan-result">✨ 玄空飞星分析</a>
+        <a class="btn btn-primary" href="jinsuo.html#report">🔒 金锁玉关分析</a>
+      </div>
+      <p class="save-status" id="save-status"></p>
+    </section>
+
+    <p class="app-footer">标注数据仅保存在本机 · 传统文化参考,请勿迷信 · <a href="index.html">阳宅风水首页</a></p>
+  </main>
+
+  <script src="js/upload.js"></script>
+  <script src="js/install.js"></script>
+  <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js'));</script>
+</body>
+</html>

@@ -1,15 +1,23 @@
 /* ========== 阳宅风水 · Service Worker(离线缓存) ========== */
-const CACHE = 'yangzhai-v1';
+const CACHE = 'yangzhai-v3';
 const ASSETS = [
   './',
   'index.html',
   'luopan.html',
+  'luantou.html',
+  'xuankong.html',
+  'jinsuo.html',
+  'upload.html',
   'sunlight.html',
   'css/style.css',
   'css/luopan.css',
+  'css/schools.css',
   'css/sunlight.css',
-  'js/app.js',
   'js/luopan.js',
+  'js/luantou.js',
+  'js/xuankong.js',
+  'js/jinsuo.js',
+  'js/upload.js',
   'js/sunlight.js',
   'js/install.js',
   'manifest.webmanifest',

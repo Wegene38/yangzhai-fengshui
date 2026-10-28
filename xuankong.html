@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>玄空飞星分析 · 三元九运排盘</title>
+  <meta name="description" content="玄空飞星派(三元玄空)阳宅分析:按建造/入住年份定元运,选朝向自动排九宫飞星盘,识别旺山旺向、上山下水,逐宫解释山向星宜忌。" />
+  <meta name="theme-color" content="#a63c2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/luopan.css" />
+  <link rel="stylesheet" href="css/schools.css" />
+</head>
+<body>
+
+  <header class="app-top">
+    <a class="back" href="index.html">← 选门派</a>
+    <div class="app-title">✨ 玄空飞星 · 排盘分析</div>
+    <button class="install-btn top-install" type="button">📥 安装</button>
+  </header>
+
+  <main class="app-main">
+
+    <section class="app-card">
+      <h2 class="app-h2">玄空飞星是什么?</h2>
+      <p class="app-hint" style="margin-top:0">
+        玄空飞星把<b>时间</b>引入风水:三元九运,每 20 年换一运(现在 2024-2043 行<b>九运</b>)。
+        同一套房子,不同年代入住,吉凶方位不一样。输入你家建造或入住的年代,排出当运的飞星盘即可。
+        本页为<b>八方向简化盘</b>(专业玄空还需兼向分金、城门诀等,仅供参考学习)。
+      </p>
+    </section>
+
+    <!-- ① 设置 -->
+    <section class="app-card">
+      <h2 class="app-h2">① 入住年代 + 朝向</h2>
+      <div class="plan-controls">
+        <label>建造 / 入住年份
+          <input type="number" id="year" min="1864" max="2100" value="2024" style="width:6rem" />
+        </label>
+        <span class="fx-yun-badge" id="yun-badge"></span>
+      </div>
+      <div class="dir-grid" id="dir-grid"></div>
+      <p class="app-hint">不知道哪年算?一般按<b>搬入居住的年份</b>起盘。1984-2003 行七运、2004-2023 行八运、2024-2043 行九运。</p>
+    </section>
+
+    <!-- ② 飞星盘 -->
+    <section class="app-card">
+      <h2 class="app-h2">② 当运飞星盘(北在上,点宫位看解释)</h2>
+      <p class="layout-hint">每格三个数:<b style="color:#8e44ad">左上=山星(管人丁健康)</b> · 中=运星 · <b style="color:#b03a2e">右下=向星(管财禄)</b></p>
+      <div class="fx-grid" id="fx-grid"></div>
+      <div class="room-detail" id="fx-detail">
+        <p class="detail-placeholder">👆 点任意宫位,看这个方位的宜忌。</p>
+      </div>
+    </section>
+
+    <!-- ③ 大局 -->
+    <section class="app-card">
+      <h2 class="app-h2">③ 大局判断与布置建议</h2>
+      <div id="fx-summary"></div>
+    </section>
+
+    <!-- ④ 户型读取 -->
+    <section class="app-card" id="plan-result">
+      <h2 class="app-h2">④ 结合你的户型图</h2>
+      <div id="plan-body"><p style="text-align:center;color:var(--ink-soft)">还没有户型标注。去 <a href="upload.html" style="color:#a63c2a">📐 户型图标注</a> 标出房间,这里自动对照飞星盘点评。</p></div>
+    </section>
+
+    <p class="app-footer">八方向简化盘,仅供传统文化学习 · 专业勘舆请咨询专业人士 · <a href="index.html">选别的门派</a></p>
+  </main>
+
+  <script src="js/xuankong.js"></script>
+  <script src="js/install.js"></script>
+  <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js'));</script>
+</body>
+</html>

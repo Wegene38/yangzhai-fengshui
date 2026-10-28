@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>峦头派分析 · 看环境山水</title>
+  <meta name="description" content="峦头派(形法派)阳宅分析:选朝向、按方位勾选周围的山楼路水环境,实时判断靠山、明堂、路冲、反弓、天斩等吉凶并给化解。" />
+  <meta name="theme-color" content="#a63c2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/luopan.css" />
+  <link rel="stylesheet" href="css/schools.css" />
+</head>
+<body>
+
+  <header class="app-top">
+    <a class="back" href="index.html">← 选门派</a>
+    <div class="app-title">⛰️ 峦头派 · 环境分析</div>
+    <button class="install-btn top-install" type="button">📥 安装</button>
+  </header>
+
+  <main class="app-main">
+
+    <section class="app-card">
+      <h2 class="app-h2">峦头派是什么?</h2>
+      <p class="app-hint" style="margin-top:0">
+        峦头派(形法派)是最古老的风水门派,只看<b>看得见摸得着</b>的东西:
+        背后有没有靠山、前面明堂开不开阔、路和水是环抱还是反弓直冲。
+        口诀是「<b>山环水抱、藏风聚气</b>」。方向感:峦头为体,理气为用——其他门派都建立在它之上。
+      </p>
+    </section>
+
+    <!-- ① 朝向 -->
+    <section class="app-card">
+      <h2 class="app-h2">① 你家大门 / 阳台朝哪个方向?</h2>
+      <div class="dir-grid" id="dir-grid"></div>
+      <p class="app-hint">选定朝向后:<b>背后 = 坐山方(宜有靠)</b>,<b>面前 = 明堂方(宜开阔)</b>,左右 = 龙虎方(宜环护)。</p>
+    </section>
+
+    <!-- ② 按方位记环境 -->
+    <section class="app-card">
+      <h2 class="app-h2">② 周围环境:点一个方位,勾选那边有什么</h2>
+      <div class="dir-chips" id="dir-chips"></div>
+      <div class="check-palette" id="check-palette"></div>
+      <p class="app-hint">💡 更省事的方式:去 <a href="upload.html" style="color:#a63c2a">📐 户型图标注</a> 把高楼、道路等直接点在图上,这里会<b>自动读取</b>。</p>
+    </section>
+
+    <!-- ③ 分析报告 -->
+    <section class="app-card" id="report">
+      <h2 class="app-h2">③ 峦头分析报告</h2>
+      <div id="report-body"><p style="text-align:center;color:var(--ink-soft)">先选朝向、勾几个环境要素,报告会实时生成。</p></div>
+    </section>
+
+    <p class="app-footer">峦头吉凶为传统经验之谈,实际请结合采光噪音安全判断 · <a href="index.html">选别的门派</a></p>
+  </main>
+
+  <script src="js/luantou.js"></script>
+  <script src="js/install.js"></script>
+  <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js'));</script>
+</body>
+</html>

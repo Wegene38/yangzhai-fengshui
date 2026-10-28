@@ -24,6 +24,49 @@
 
   <main class="app-main">
 
+    <!-- 第 0 步:命卦测算 -->
+    <section class="app-card" id="calc">
+      <h2 class="app-h2">⓪ 第 0 步(可选):算算你的命卦</h2>
+      <p class="layout-hint">按生日算出你是「东四命」还是「西四命」,决定你的四个吉利方向。</p>
+      <form id="calc-form" class="calc-form">
+        <div class="field">
+          <label for="birthdate">出生日期</label>
+          <input type="date" id="birthdate" name="birthdate" value="1990-06-15" required />
+          <small>立春(2 月 4 日)前出生按上一年算。</small>
+        </div>
+        <div class="field">
+          <label>性别</label>
+          <div class="radio-row">
+            <label class="radio"><input type="radio" name="gender" value="male" checked /><span>男</span></label>
+            <label class="radio"><input type="radio" name="gender" value="female" /><span>女</span></label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">推 算</button>
+      </form>
+
+      <div id="calc-result" class="calc-result" hidden>
+        <div class="result-head">
+          <div class="gua-badge"><span id="result-gua-symbol"></span><strong id="result-gua-name"></strong><em id="result-gua-trigram"></em></div>
+          <div class="result-meta"><p id="result-year"></p></div>
+        </div>
+        <div class="plain-summary" id="result-summary"></div>
+        <div class="result-body">
+          <div class="result-compass" id="calc-compass"></div>
+          <div class="result-lists">
+            <div class="list-block good">
+              <h3>✅ 四个吉利方向(多用)</h3>
+              <ul id="result-good"></ul>
+            </div>
+            <div class="list-block bad">
+              <h3>🚫 四个不吉利方向(少待)</h3>
+              <ul id="result-bad"></ul>
+            </div>
+            <p class="sleep-tip" id="result-sleep"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 第 1 步:转罗盘 -->
     <section class="app-card">
       <h2 class="app-h2">① 转动罗盘,选你家大门 / 阳台的朝向</h2>
@@ -61,6 +104,12 @@
         <li>🛏️ 床头尽量靠吉方的那面墙,睡得更踏实。</li>
         <li>⚠️ 传统文化参考,仅供娱乐;住得亮堂、通风、整齐,比什么方位都强。</li>
       </ul>
+    </section>
+
+    <!-- 户型图读取 -->
+    <section class="app-card" id="plan-result">
+      <h2 class="app-h2">📐 结合你的户型图(自动读取)</h2>
+      <div id="plan-body"><p class="detail-placeholder">还没有户型标注。去 <a href="upload.html" style="color:#a63c2a">📐 户型图标注</a> 点出房间位置,这里按当前宅卦自动点评每个房间。</p></div>
     </section>
 
     <!-- 第 3 步:不是九宫格怎么办 -->
@@ -108,7 +157,7 @@
       </div>
     </section>
 
-    <p class="app-footer">内容源自传统民俗文化,仅供参考娱乐,请勿迷信 · <a href="index.html">阳宅风水首页</a></p>
+    <p class="app-footer">内容源自传统民俗文化,仅供参考娱乐,请勿迷信 · <a href="index.html">选别的门派</a> · <span id="footer-year"></span></p>
 
   </main>
 
