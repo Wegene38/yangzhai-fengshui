@@ -1,4 +1,4 @@
-/* ========== 日照模拟器 · 太阳位置与图表 ========== */
+/* ========== 日照模拟器 · 太阳位置与互动图表 ========== */
 
 const D2R = Math.PI / 180;
 const R2D = 180 / Math.PI;
@@ -14,22 +14,19 @@ const SEASONS = [
 ];
 
 const norm180 = a => ((a % 360) + 540) % 360 - 180;
+const norm360 = a => ((a % 360) + 360) % 360;
 const clamp1 = v => Math.max(-1, Math.min(1, v));
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-// 太阳位置(地平坐标系):返回高度角 alt 与方位角 az(北=0,顺时针)
-// ENU 向量法:x_E = -cosδ·sinH;x_N = cosφ·sinδ − sinφ·cosδ·cosH;x_U = sinφ·sinδ + cosφ·cosδ·cosH
+// 太阳位置(地平坐标系):高度角 alt、方位角 az(北=0,顺时针)
 function solar(latDeg, declDeg, hour) {
   const φ = latDeg * D2R, δ = declDeg * D2R, H = (hour - 12) * 15 * D2R;
   const E = -Math.cos(δ) * Math.sin(H);
   const N = Math.cos(φ) * Math.sin(δ) - Math.sin(φ) * Math.cos(δ) * Math.cos(H);
   const U = Math.sin(φ) * Math.sin(δ) + Math.cos(φ) * Math.cos(δ) * Math.cos(H);
-  return {
-    alt: Math.asin(clamp1(U)) * R2D,
-    az: (Math.atan2(E, N) * R2D + 360) % 360,
-  };
+  return { alt: Math.asin(clamp1(U)) * R2D, az: (Math.atan2(E, N) * R2D + 360) % 360 };
 }
 
-// 昼长(小时);cosH0 = −tanφ·tanδ,极昼/极夜做钳制
 function dayLength(latDeg, declDeg) {
   const cosH0 = -Math.tan(latDeg * D2R) * Math.tan(declDeg * D2R);
   if (cosH0 <= -1) return 24;
@@ -37,24 +34,19 @@ function dayLength(latDeg, declDeg) {
   return 2 * Math.acos(cosH0) * R2D / 15;
 }
 
-// 朝向墙面全天受晒时长(小时):太阳高度>0 且方位与朝向夹角 < 90°
-function facadeHours(latDeg, declDeg, facing) {
+// 朝向墙面全天受晒时长(小时)
+function facadeHours(latDeg, declDeg, facingDeg) {
   const dl = dayLength(latDeg, declDeg);
   if (dl <= 0) return 0;
   let hours = 0;
   for (let t = 12 - dl / 2; t <= 12 + dl / 2; t += 0.05) {
     const { alt, az } = solar(latDeg, declDeg, t);
-    if (alt > 0 && Math.abs(norm180(az - facing)) < 90) hours += 0.05;
+    if (alt > 0 && Math.abs(norm180(az - facingDeg)) < 90) hours += 0.05;
   }
   return Math.round(hours * 10) / 10;
 }
 
-// 正午阳光经 2.4m 高窗户照进屋内的深度(米);太阳在背面或高度过低则晒不到
-function noonDepth(latDeg, declDeg, facing) {
-  const { alt, az } = solar(latDeg, declDeg, 12);
-  if (alt <= 2 || Math.abs(norm180(az - facing)) >= 90) return { d: 0, alt, hits: false };
-  return { d: Math.min(2.4 / Math.tan(alt * D2R), 15), alt, hits: true };
-}
+const noonAlt = (latDeg, declDeg) => 90 - Math.abs(latDeg - declDeg);
 
 const fmtTime = t => {
   t = ((t % 24) + 24) % 24;
@@ -62,12 +54,22 @@ const fmtTime = t => {
   return `${String(h).padStart(2, '0')}:${String(m === 60 ? 0 : m).padStart(2, '0')}`;
 };
 
-const dirName = az => DIRECTIONS[Math.round(((az % 360) + 360) % 360 / 45) % 8];
+const fmtCN = t => {
+  t = ((t % 24) + 24) % 24;
+  const h = Math.floor(t), m = Math.floor((t - h) * 60);
+  const cn = h < 6 ? '凌晨' : h < 11 ? '上午' : h < 13 ? '中午' : h < 18 ? '下午' : '晚上';
+  let h12 = h % 12; if (h12 === 0) h12 = 12;
+  return `${cn} ${h12}:${String(m).padStart(2, '0')}`;
+};
+
+const dirName = az => DIRECTIONS[Math.round(norm360(az) / 45) % 8];
 
 /* ---------- 全局状态 ---------- */
 let lat = 39.9;
-let facing = 180; // 角度:北=0,顺时针;默认朝南
-let selectedSeason = SEASONS[3]; // 默认展示冬至
+let facing = 180;                 // 朝向角度:北=0 顺时针
+let selSeason = SEASONS[3];       // 默认冬至
+let t = 9;                        // 当前时刻(真太阳时)
+let secAlt = 26.7;                // 剖面图太阳高度角
 
 const CITIES = [
   { name: '北京', lat: 39.9 }, { name: '上海', lat: 31.2 }, { name: '广州', lat: 23.1 },
@@ -77,11 +79,16 @@ const CITIES = [
 
 try {
   const saved = parseInt(localStorage.getItem('yz_facing_idx'), 10);
-  if (!Number.isNaN(saved)) facing = ((saved % 8) + 8) % 8 * 45;
+  if (!Number.isNaN(saved)) facing = (((saved % 8) + 8) % 8) * 45;
 } catch (e) { /* ignore */ }
 
 function saveFacing() {
-  try { localStorage.setItem('yz_facing_idx', String(Math.round(facing / 45))); } catch (e) { /* ignore */ }
+  try { localStorage.setItem('yz_facing_idx', String(Math.round(norm360(facing) / 45) % 8)); } catch (e) { /* ignore */ }
+}
+
+function dayWindow() {
+  const dl = dayLength(lat, selSeason.decl);
+  return { dl, rise: 12 - dl / 2, set: 12 + dl / 2 };
 }
 
 /* ---------- ① 设置区 ---------- */
@@ -94,6 +101,7 @@ CITIES.forEach(c => {
   btn.addEventListener('click', () => {
     lat = c.lat;
     document.getElementById('lat').value = c.lat;
+    clampTimes();
     renderAll();
   });
   cityChips.appendChild(btn);
@@ -101,7 +109,7 @@ CITIES.forEach(c => {
 
 document.getElementById('lat').addEventListener('input', function () {
   const v = parseFloat(this.value);
-  if (!Number.isNaN(v) && v >= -66 && v <= 66) { lat = v; renderAll(); }
+  if (!Number.isNaN(v) && v >= -66 && v <= 66) { lat = v; clampTimes(); renderAll(); }
 });
 
 const dirGrid = document.getElementById('dir-grid');
@@ -110,149 +118,289 @@ DIRECTIONS.forEach((dir, i) => {
   btn.type = 'button';
   btn.textContent = '朝' + dir;
   btn.dataset.idx = i;
-  btn.addEventListener('click', () => { facing = i * 45; saveFacing(); renderAll(); });
+  btn.addEventListener('click', () => { facing = i * 45; saveFacing(); clampTimes(); renderAll(); });
   dirGrid.appendChild(btn);
 });
 
-/* ---------- ② 四季卡片 ---------- */
-function renderSeasonCards() {
-  const wrap = document.getElementById('season-cards');
-  wrap.innerHTML = SEASONS.map(s => {
-    const dl = dayLength(lat, s.decl);
-    const rise = fmtTime(12 - dl / 2), set = fmtTime(12 + dl / 2);
-    const hours = facadeHours(lat, s.decl, facing);
-    const { alt } = solar(lat, s.decl, 12);
-    return `<div class="season-card" style="border-top:4px solid ${s.color}">
-      <h3 style="color:${s.color}">${s.name}<small>${s.date}</small></h3>
-      <p>日出 ${rise} · 日落 ${set}(昼长 ${Math.floor(dl)} 小时 ${Math.round((dl % 1) * 60)} 分)</p>
-      <p>你家朝向那面墙晒 <b>${hours} 小时</b></p>
-      <p>正午太阳高度 <b>${alt.toFixed(1)}°</b></p>
-    </div>`;
-  }).join('');
+const seasonTabs = document.getElementById('season-tabs');
+SEASONS.forEach(s => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = s.name;
+  btn.dataset.key = s.key;
+  btn.addEventListener('click', () => { selSeason = s; clampTimes(); renderAll(); });
+  seasonTabs.appendChild(btn);
+});
+
+function clampTimes() {
+  const { rise, set } = dayWindow();
+  t = clamp(t, rise + 0.02, Math.max(rise + 0.02, set - 0.02));
+  secAlt = clamp(secAlt, 4, 80);
 }
 
-/* ---------- ③ 剖面图 ---------- */
-function renderSection() {
-  const S = 48; // 1 米 = 48px
-  const floorY = 205, wallX = 76, roomDepth = 8;
-  const winTopY = floorY - 2.4 * S, sillY = floorY - 0.9 * S;
+/* ---------- ② 互动俯视图 ---------- */
+const topSvg = document.getElementById('top-svg');
+const TW = 420, TC = 210, R_SUN = 160;
+const HOUSE_HW = 120, HOUSE_HH = 88; // 面宽/进深(px,约 10px=1m)
+
+// 凸包(影子多边形用,8 个点)
+function hull(pts) {
+  pts = [...pts].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower = [], upper = [];
+  for (const p of pts) {
+    while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  for (let i = pts.length - 1; i >= 0; i--) {
+    const p = pts[i];
+    while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  lower.pop(); upper.pop();
+  return lower.concat(upper);
+}
+
+function viewPoint(viewDeg, r) {
+  const a = viewDeg * D2R;
+  return [TC + r * Math.sin(a), TC - r * Math.cos(a)];
+}
+
+// 由拖拽位置反推时刻:在当日弧线上找方位最接近的点
+function timeFromPointer(px, py) {
+  const viewAng = Math.atan2(px - TC, -(py - TC)) * R2D;
+  const azWanted = norm360(viewAng + facing);
+  const { rise, set } = dayWindow();
+  let best = rise, bestDiff = 1e9;
+  for (let tt = rise; tt <= set + 1e-6; tt += 0.02) {
+    const diff = Math.abs(norm180(solar(lat, selSeason.decl, tt).az - azWanted));
+    if (diff < bestDiff) { bestDiff = diff; best = tt; }
+  }
+  return { t: best, night: bestDiff > 10 };
+}
+
+function renderTop(nightMsg) {
+  const s = selSeason;
+  const { rise, set, dl } = dayWindow();
+  const { alt, az } = solar(lat, s.decl, t);
+  const delta = norm180(az - facing);
+  const facingName = DIRECTIONS[Math.round(norm360(facing) / 45) % 8];
+
   let g = '';
 
-  // 地板与进深刻度
-  g += `<line x1="${wallX}" y1="${floorY}" x2="${wallX + roomDepth * S}" y2="${floorY}" stroke="#5c5346" stroke-width="2.5"/>`;
-  for (let m = 0; m <= roomDepth; m++) {
+  // 夜环(全天圆)与白昼弧(金色轨迹)
+  g += `<circle cx="${TC}" cy="${TC}" r="${R_SUN}" fill="none" stroke="#e5dcc6" stroke-width="2" stroke-dasharray="3 6"/>`;
+  if (dl > 0.01) {
+    const azR = solar(lat, s.decl, rise).az, azS = solar(lat, s.decl, set).az;
+    const [x1, y1] = viewPoint(norm180(azR - facing), R_SUN);
+    const [x2, y2] = viewPoint(norm180(azS - facing), R_SUN);
+    const span = norm360(azS - azR);
+    g += `<path d="M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${R_SUN} ${R_SUN} 0 ${span > 180 ? 1 : 0} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="#d4af37" stroke-width="5" stroke-linecap="round" opacity="0.85"/>`;
+    g += `<text x="${x1.toFixed(1)}" y="${(y1 - 10).toFixed(1)}" font-size="11" fill="#b8860b" text-anchor="middle">日出</text>`;
+    g += `<text x="${x2.toFixed(1)}" y="${(y2 - 10).toFixed(1)}" font-size="11" fill="#b8860b" text-anchor="middle">日落</text>`;
+  }
+
+  // 世界方位标注(随朝向旋转,北为红色)
+  DIRECTIONS.forEach((dir, i) => {
+    const [x, y] = viewPoint(i * 45 - facing, 198);
+    g += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="11" fill="${dir === '北' ? '#a63c2a' : '#8a7a5c'}" font-weight="${dir === '北' ? 700 : 400}" text-anchor="middle" dominant-baseline="middle">${dir}</text>`;
+  });
+
+  // 影子(10m 高楼的凸包,裁剪在图内)
+  if (alt > 1) {
+    const L = Math.min(100 / Math.tan(Math.max(alt, 3) * D2R), 300);
+    const sd = delta + 180;
+    const dx = Math.sin(sd * D2R), dy = -Math.cos(sd * D2R);
+    const corners = [
+      [TC - HOUSE_HW / 2, TC - HOUSE_HH / 2], [TC + HOUSE_HW / 2, TC - HOUSE_HH / 2],
+      [TC + HOUSE_HW / 2, TC + HOUSE_HH / 2], [TC - HOUSE_HW / 2, TC + HOUSE_HH / 2],
+    ];
+    const poly = hull(corners.concat(corners.map(([x, y]) => [x + L * dx, y + L * dy])));
+    g += `<polygon points="${poly.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="rgba(43,38,32,0.16)"/>`;
+  }
+
+  // 受光边高亮
+  const left = TC - HOUSE_HW / 2, right = TC + HOUSE_HW / 2, top = TC - HOUSE_HH / 2, bottom = TC + HOUSE_HH / 2;
+  let litText;
+  if (Math.abs(delta) < 45) {
+    g += `<line x1="${left}" y1="${top}" x2="${right}" y2="${top}" stroke="#ffd54f" stroke-width="8" stroke-linecap="round"/>`;
+    litText = `太阳正对着你家正面,<b>靠${facingName}边的一排房间最晒</b>`;
+  } else if (delta <= -45 && delta >= -135) {
+    g += `<line x1="${left}" y1="${top}" x2="${left}" y2="${bottom}" stroke="#ffd54f" stroke-width="8" stroke-linecap="round"/>`;
+    litText = '太阳斜照<b>左侧面</b>,靠左那排房间晒到';
+  } else if (delta >= 45 && delta <= 135) {
+    g += `<line x1="${right}" y1="${top}" x2="${right}" y2="${bottom}" stroke="#ffd54f" stroke-width="8" stroke-linecap="round"/>`;
+    litText = '太阳斜照<b>右侧面</b>,靠右那排房间晒到';
+  } else {
+    litText = '太阳在房子<b>背后</b>,正面完全晒不到';
+  }
+
+  // 房子
+  g += `<rect x="${left}" y="${top}" width="${HOUSE_HW}" height="${HOUSE_HH}" rx="6" fill="#f2ead6" stroke="#b8860b" stroke-width="2.5"/>`;
+  g += `<text x="${TC}" y="${TC + 4}" font-size="13" fill="#8a7a5c" text-anchor="middle">你家 · 朝${facingName}</text>`;
+
+  // 光线与太阳
+  const [sx2, sy2] = viewPoint(delta, R_SUN);
+  g += `<line x1="${sx2.toFixed(1)}" y1="${sy2.toFixed(1)}" x2="${TC}" y2="${TC}" stroke="${s.color}" stroke-width="2" stroke-dasharray="5 5" opacity="0.65"/>`;
+  g += `<circle cx="${sx2.toFixed(1)}" cy="${sy2.toFixed(1)}" r="17" fill="#ffd54f" stroke="#e67e22" stroke-width="2.5"/>`;
+  g += `<text x="${sx2.toFixed(1)}" y="${(sy2 + 6).toFixed(1)}" font-size="17" text-anchor="middle">☀️</text>`;
+
+  topSvg.innerHTML = g;
+
+  // 读数与说明
+  const shadowM = alt > 3 ? (10 / Math.tan(Math.max(alt, 3) * D2R)) : null;
+  document.getElementById('top-readout').innerHTML =
+    `🕐 <b>${fmtCN(t)}</b> · ☀️ 在 <b>${dirName(az)}方</b> · 高度 <b>${alt.toFixed(0)}°</b> · ${s.name}`;
+  const shadowText = shadowM ? `整栋楼(10 米高)的影子约 <b>${shadowM.toFixed(0)} 米</b>长` : '影子非常长';
+  document.getElementById('top-cap').innerHTML = nightMsg
+    ? `🌙 那个方向是「夜区」——太阳一天只走金色那段弧(从${dirName(solar(lat, s.decl, rise).az)}方经白天到${dirName(solar(lat, s.decl, set).az)}方),太阳已帮你停在最边上。`
+    : `${litText};${shadowText}。`;
+  document.getElementById('day-stats').textContent =
+    dl > 0.01
+      ? `${s.name}这天:日出 ${fmtTime(rise)} · 日落 ${fmtTime(set)} · 昼长 ${Math.floor(dl)} 小时 ${Math.round(dl % 1 * 60)} 分 · 你家朝向这面墙晒 ${facadeHours(lat, s.decl, facing)} 小时`
+      : `${s.name}这天极昼/极夜,模拟不展示`;
+}
+
+/* 俯视图拖拽 */
+let topDragging = false;
+function topPointer(e) {
+  const rect = topSvg.getBoundingClientRect();
+  const scale = TW / rect.width;
+  const px = (e.clientX - rect.left) * scale, py = (e.clientY - rect.top) * scale;
+  const r = timeFromPointer(px, py);
+  t = r.t;
+  renderTop(r.night);
+}
+topSvg.addEventListener('pointerdown', e => {
+  topDragging = true; stopPlay();
+  topSvg.setPointerCapture(e.pointerId);
+  topPointer(e);
+});
+topSvg.addEventListener('pointermove', e => { if (topDragging) topPointer(e); });
+topSvg.addEventListener('pointerup', () => { topDragging = false; });
+topSvg.addEventListener('pointercancel', () => { topDragging = false; });
+
+/* 播放动画 */
+let playing = false, animStart = 0;
+const playBtn = document.getElementById('play-btn');
+function stopPlay() { playing = false; playBtn.textContent = '▶ 让太阳自动跑一整天'; }
+playBtn.addEventListener('click', () => {
+  if (playing) { stopPlay(); return; }
+  const { rise, set, dl } = dayWindow();
+  if (dl <= 0.01) return;
+  playing = true;
+  playBtn.textContent = '⏸ 暂停';
+  animStart = performance.now() - ((t - rise) / dl) * 12000;
+  requestAnimationFrame(playStep);
+});
+function playStep(now) {
+  if (!playing) return;
+  const { rise, set, dl } = dayWindow();
+  const p = (now - animStart) / 12000;
+  if (p >= 1) { t = set; renderTop(false); stopPlay(); playBtn.textContent = '▶ 再看一遍'; return; }
+  t = rise + p * dl;
+  renderTop(false);
+  requestAnimationFrame(playStep);
+}
+
+/* ---------- ③ 互动剖面图 ---------- */
+const secSvg = document.getElementById('sec-svg');
+const SW = 560;
+const S = 48, floorY = 208, wallX = 84;
+const winTopY = floorY - 2.4 * S;
+const SEC_R = 165;
+
+function renderSection() {
+  let g = '';
+
+  // 地板与刻度
+  g += `<line x1="${wallX}" y1="${floorY}" x2="${wallX + 8 * S}" y2="${floorY}" stroke="#5c5346" stroke-width="2.5"/>`;
+  for (let m = 0; m <= 8; m++) {
     const x = wallX + m * S;
     g += `<line x1="${x}" y1="${floorY}" x2="${x}" y2="${floorY + 7}" stroke="#5c5346" stroke-width="1.5"/>`;
     if (m % 2 === 0) g += `<text x="${x}" y="${floorY + 24}" font-size="11" fill="#5c5346" text-anchor="middle">${m}m</text>`;
   }
+  g += `<rect x="${wallX}" y="${floorY - 6}" width="${8 * S}" height="6" fill="#efe8d6"/>`;
 
-  // 墙与窗(左墙:窗洞上、下两段实体,中间虚线表示玻璃)
+  // 墙与窗
   const wallColor = '#c9b892';
-  g += `<rect x="${wallX - 14}" y="40" width="14" height="${winTopY - 40}" fill="${wallColor}" stroke="#8a7a5c"/>`;
-  g += `<rect x="${wallX - 14}" y="${sillY}" width="14" height="${floorY - sillY}" fill="${wallColor}" stroke="#8a7a5c"/>`;
-  g += `<line x1="${wallX}" y1="${winTopY}" x2="${wallX}" y2="${sillY}" stroke="#8a7a5c" stroke-width="2" stroke-dasharray="4 3"/>`;
-  g += `<text x="${wallX - 22}" y="${(winTopY + sillY) / 2}" font-size="11" fill="#5c5346" text-anchor="end">窗</text>`;
-  g += `<text x="${wallX - 22}" y="${(winTopY + sillY) / 2 + 14}" font-size="10" fill="#8a7a5c" text-anchor="end">2.4m</text>`;
+  g += `<rect x="${wallX - 14}" y="42" width="14" height="${winTopY - 42}" fill="${wallColor}" stroke="#8a7a5c"/>`;
+  g += `<rect x="${wallX - 14}" y="${floorY - 0.9 * S}" width="14" height="${0.9 * S}" fill="${wallColor}" stroke="#8a7a5c"/>`;
+  g += `<line x1="${wallX}" y1="${winTopY}" x2="${wallX}" y2="${floorY - 0.9 * S}" stroke="#8a7a5c" stroke-width="2" stroke-dasharray="4 3"/>`;
+  g += `<text x="${wallX - 22}" y="${(winTopY + floorY - 0.45 * S) / 2}" font-size="11" fill="#5c5346" text-anchor="end">窗</text>`;
+  g += `<text x="${wallX - 22}" y="${(winTopY + floorY - 0.45 * S) / 2 + 14}" font-size="10" fill="#8a7a5c" text-anchor="end">2.4m</text>`;
 
-  // 屋内地面浅色
-  g += `<rect x="${wallX}" y="${floorY - 6}" width="${roomDepth * S}" height="6" fill="#efe8d6"/>`;
+  // 太阳轨迹弧(可拖动)
+  const [ax0, ay0] = [wallX + SEC_R * Math.cos(2 * D2R), winTopY - SEC_R * Math.sin(2 * D2R)];
+  const [ax1, ay1] = [wallX + SEC_R * Math.cos(80 * D2R), winTopY - SEC_R * Math.sin(80 * D2R)];
+  g += `<path d="M ${ax0.toFixed(1)} ${ay0.toFixed(1)} A ${SEC_R} ${SEC_R} 0 0 0 ${ax1.toFixed(1)} ${ay1.toFixed(1)}" fill="none" stroke="#d4af37" stroke-width="4" stroke-linecap="round" opacity="0.8"/>`;
 
-  // 四季正午光线
-  const labels = [];
-  SEASONS.forEach(s => {
-    const { d, alt, hits } = noonDepth(lat, s.decl, facing);
-    if (hits && d > 0.15) {
-      const xHit = wallX + Math.max(d, 0.35) * S;
-      g += `<line x1="${wallX}" y1="${winTopY}" x2="${xHit.toFixed(1)}" y2="${floorY}" stroke="${s.color}" stroke-width="3" stroke-linecap="round"/>`;
-      g += `<circle cx="${xHit.toFixed(1)}" cy="${floorY - 5}" r="4" fill="${s.color}"/>`;
-      labels.push(`<li><span class="dot" style="background:${s.color}"></span><b>${s.name}</b>&nbsp;正午太阳 ${alt.toFixed(1)}°,照进约 <b>${d.toFixed(1)} 米</b> 深</li>`);
-    } else {
-      labels.push(`<li><span class="dot" style="background:${s.color}"></span><b>${s.name}</b>&nbsp;${alt > 0 ? '正午太阳在房子背面,正面晒不到' : '正午太阳在地平线下'}(高度 ${alt.toFixed(1)}°)</li>`);
-    }
+  // 节气参考点(吸附)
+  const marks = [
+    { name: '冬至', alt: noonAlt(lat, -23.44), color: '#5d8aa8' },
+    { name: '春分/秋分', alt: noonAlt(lat, 0), color: '#8a9a5b' },
+    { name: '夏至', alt: noonAlt(lat, 23.44), color: '#e67e22' },
+  ].filter(m => m.alt >= 4 && m.alt <= 80);
+
+  let nearName = null;
+  marks.forEach(m => {
+    const [mx, my] = [wallX + SEC_R * Math.cos(m.alt * D2R), winTopY - SEC_R * Math.sin(m.alt * D2R)];
+    g += `<circle cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="5" fill="#fff" stroke="${m.color}" stroke-width="2.5"/>`;
+    g += `<text x="${(mx + 9).toFixed(1)}" y="${(my + 4).toFixed(1)}" font-size="11" fill="${m.color}">${m.name}</text>`;
+    if (Math.abs(secAlt - m.alt) < 1.6) nearName = m;
   });
 
-  // 小太阳装饰
-  g += `<text x="${wallX - 24}" y="${winTopY - 12}" font-size="18">☀️</text>`;
+  // 光线与照深
+  const alpha = secAlt * D2R;
+  const depthM = Math.min(2.4 / Math.tan(alpha), 15);
+  const xHit = wallX + Math.max(depthM, 0.3) * S;
+  g += `<line x1="${wallX}" y1="${winTopY}" x2="${xHit.toFixed(1)}" y2="${floorY}" stroke="#e67e22" stroke-width="3.5" stroke-linecap="round"/>`;
+  g += `<line x1="${xHit.toFixed(1)}" y1="${floorY}" x2="${xHit.toFixed(1)}" y2="${floorY - 30}" stroke="#a63c2a" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+  g += `<text x="${(xHit + 6).toFixed(1)}" y="${floorY - 36}" font-size="13" font-weight="700" fill="#a63c2a">照进 ${(depthM).toFixed(1)} 米</text>`;
 
-  document.getElementById('section-svg').innerHTML = g;
-  document.getElementById('depth-list').innerHTML = labels.join('');
+  // 太阳手柄
+  const [sx, sy] = [wallX + SEC_R * Math.cos(alpha), winTopY - SEC_R * Math.sin(alpha)];
+  g += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="17" fill="#ffd54f" stroke="#e67e22" stroke-width="2.5"/>`;
+  g += `<text x="${sx.toFixed(1)}" y="${(sy + 6).toFixed(1)}" font-size="17" text-anchor="middle">☀️</text>`;
+
+  secSvg.innerHTML = g;
+
+  document.getElementById('sec-cap').innerHTML =
+    `☀️ 太阳高度 <b>${secAlt.toFixed(0)}°</b>${nearName ? `(≈<b>${nearName.name}</b>的正午)` : ''} → 正午阳光照进约 <b>${depthM.toFixed(1)} 米</b>` +
+    (depthM < 1 ? '——基本只晒到窗边。' : depthM > 4 ? '——能一直晒到屋子深处!' : '。');
 }
 
-/* ---------- ④ 俯视图 ---------- */
-function renderSeasonTabs() {
-  const wrap = document.getElementById('season-tabs');
-  wrap.innerHTML = '';
-  SEASONS.forEach(s => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = s.name;
-    btn.classList.toggle('active', s.key === selectedSeason.key);
-    btn.addEventListener('click', () => { selectedSeason = s; renderSeasonTabs(); renderTopviews(); });
-    wrap.appendChild(btn);
-  });
+let secDragging = false;
+function secPointer(e) {
+  const rect = secSvg.getBoundingClientRect();
+  const scale = SW / rect.width;
+  const px = (e.clientX - rect.left) * scale, py = (e.clientY - rect.top) * scale;
+  let a = Math.atan2(winTopY - py, px - wallX) * R2D;
+  a = clamp(a, 4, 80);
+  const marks = [
+    { name: '冬至', alt: noonAlt(lat, -23.44) },
+    { name: '春分/秋分', alt: noonAlt(lat, 0) },
+    { name: '夏至', alt: noonAlt(lat, 23.44) },
+  ];
+  for (const m of marks) if (Math.abs(a - m.alt) < 2.2 && m.alt >= 4 && m.alt <= 80) { a = m.alt; break; }
+  secAlt = a;
+  renderSection();
 }
+secSvg.addEventListener('pointerdown', e => {
+  secDragging = true;
+  secSvg.setPointerCapture(e.pointerId);
+  secPointer(e);
+});
+secSvg.addEventListener('pointermove', e => { if (secDragging) secPointer(e); });
+secSvg.addEventListener('pointerup', () => { secDragging = false; });
+secSvg.addEventListener('pointercancel', () => { secDragging = false; });
 
-function topViewSVG(s, hour) {
-  const W = 190, H = 175, cx = W / 2, cy = 88;
-  const hw = 92, hh = 66; // 面宽 / 进深(图上像素)
-  const { alt, az } = solar(lat, s.decl, hour);
-  let g = `<rect x="${cx - hw / 2}" y="${cy - hh / 2}" width="${hw}" height="${hh}" rx="4" fill="#f2ead6" stroke="#b8860b" stroke-width="2"/>`;
-  g += `<text x="${cx}" y="${cy + 4}" font-size="11" fill="#8a7a5c" text-anchor="middle">你家(朝${DIRECTIONS[Math.round(facing / 45) % 8]})</text>`;
-
-  let cap;
-  if (alt <= 0) {
-    cap = `${hour} 点太阳还没升起来或已落山,晒不到`;
-  } else {
-    const delta = norm180(az - facing); // 视角:0=正前(上),顺时针为正
-    const rad = delta * D2R;
-    const dirX = Math.sin(rad), dirY = -Math.cos(rad);
-    // 太阳箭头:从外圈指向房子
-    const tx = cx + 78 * dirX, ty = cy + 78 * dirY;
-    const hx = cx + 46 * dirX, hy = cy + 46 * dirY;
-    const px = Math.cos(rad) * 5, py = Math.sin(rad) * 5;
-    g += `<line x1="${tx.toFixed(1)}" y1="${ty.toFixed(1)}" x2="${hx.toFixed(1)}" y2="${hy.toFixed(1)}" stroke="${s.color}" stroke-width="2.5"/>`;
-    g += `<polygon points="${(hx - 9 * dirX).toFixed(1)},${(hy - 9 * dirY).toFixed(1)} ${(hx + px).toFixed(1)},${(hy + py).toFixed(1)} ${(hx - px).toFixed(1)},${(hy - py).toFixed(1)}" fill="${s.color}"/>`;
-    g += `<text x="${(cx + 88 * dirX).toFixed(1)}" y="${(cy + 88 * dirY + 4).toFixed(1)}" font-size="13" text-anchor="middle">☀️</text>`;
-
-    // 被晒到的边:高亮
-    const left = cx - hw / 2, right = cx + hw / 2, top = cy - hh / 2, bottom = cy + hh / 2;
-    let litText;
-    if (Math.abs(delta) < 45) {
-      g += `<line x1="${left}" y1="${top}" x2="${right}" y2="${top}" stroke="#ffd54f" stroke-width="6" stroke-linecap="round"/>`;
-      litText = '<b>正面整排</b>都晒到';
-    } else if (delta < 0) {
-      g += `<line x1="${left}" y1="${top}" x2="${left}" y2="${bottom}" stroke="#ffd54f" stroke-width="6" stroke-linecap="round"/>`;
-      litText = '晒<b>左侧房间</b>(图上看是左边)';
-    } else if (delta > 0) {
-      g += `<line x1="${right}" y1="${top}" x2="${right}" y2="${bottom}" stroke="#ffd54f" stroke-width="6" stroke-linecap="round"/>`;
-      litText = '晒<b>右侧房间</b>(图上看是右边)';
-    } else {
-      litText = '太阳在房子<b>正后方</b>,晒不到正面';
-    }
-    if (Math.abs(delta) >= 135) litText = '太阳在房子<b>背后</b>,这一面晒不到';
-    cap = `${hour} 点 ☀️ 在<b>${dirName(az)}方</b>(高度 ${alt.toFixed(0)}°)→ ${litText}`;
-  }
-  return { g, cap };
-}
-
-function renderTopviews() {
-  const wrap = document.getElementById('topviews');
-  const hours = [[9, '上午 9 点'], [12, '正午 12 点'], [15, '下午 3 点']];
-  wrap.innerHTML = hours.map(([h, label]) => {
-    const { g, cap } = topViewSVG(selectedSeason, h);
-    return `<div class="mini">
-      <svg viewBox="0 0 ${190} ${175}">${g}</svg>
-      <p class="mini-cap"><b>${label}</b> · ${selectedSeason.name}<br/>${cap}</p>
-    </div>`;
-  }).join('');
-}
-
-/* ---------- ⑤ 结论 ---------- */
+/* ---------- ④ 结论 ---------- */
 function renderConclusion() {
   const winter = facadeHours(lat, -23.44, facing);
   const summer = facadeHours(lat, 23.44, facing);
-  const { alt: altW } = solar(lat, -23.44, 12);
-  const facingName = DIRECTIONS[Math.round(facing / 45) % 8];
+  const altW = noonAlt(lat, -23.44);
+  const facingName = DIRECTIONS[Math.round(norm360(facing) / 45) % 8];
 
   let mood;
   if (winter >= 6) mood = '冬天也能晒到大半天太阳,属于采光很好的朝向 👍';
@@ -261,19 +409,17 @@ function renderConclusion() {
   else mood = '冬天正午晒不到太阳(朝北的典型情况),白天也偏阴,建议灯光补足、选暖色装修。';
 
   let extra = '';
-  const fn = facingName;
-  if (fn === '西' || fn === '西南') extra = '<p>🌞 另外:你家<b>下午西晒明显</b>,夏天西边房间会热,备好遮阳帘或隔热膜。</p>';
-  else if (fn === '东') extra = '<p>🌅 你家<b>上午阳光最好</b>,下午就背阴了——起居习惯早睡早起的话很合适。</p>';
-  else if (fn === '东南' || fn === '南' || fn === '西南') extra = '<p>🏠 传统说「坐北朝南好」,从日照看确实成立:冬天太阳低、南面晒得深,夏天太阳高、反而晒不进深处,冬暖夏凉。</p>';
+  if (facingName === '西' || facingName === '西南') extra = '<p>🌞 另外:你家<b>下午西晒明显</b>,夏天西边房间会热,备好遮阳帘或隔热膜。</p>';
+  else if (facingName === '东') extra = '<p>🌅 你家<b>上午阳光最好</b>,下午就背阴了——起居习惯早睡早起的话很合适。</p>';
+  else if (facingName === '东南' || facingName === '南' || facingName === '西南') extra = '<p>🏠 传统说「坐北朝南好」,从日照看确实成立:冬天太阳低、南面晒得深,夏天太阳高、反而晒不进深处,冬暖夏凉。</p>';
 
-  const cot = altW > 3 ? (1 / Math.tan(altW * D2R)) : null;
+  const cot = altW > 3 ? 1 / Math.tan(altW * D2R) : null;
   const spacing = cot
-    ? `🏠 <b>买房看楼间距:</b>${selectedSeason ? '冬至' : ''}正午太阳只有 ${altW.toFixed(1)}°,前楼每高 1 米,影子就长约 <b>${cot.toFixed(1)} 米</b>。想让冬天正午的阳光照进你家,楼间距最好 ≥ 前楼高度 × ${cot.toFixed(1)}。`
+    ? `🏠 <b>买房看楼间距:</b>冬至正午太阳只有 ${altW.toFixed(1)}°,前楼每高 1 米,影子就长约 <b>${cot.toFixed(1)} 米</b>。想让冬天正午的阳光照进你家,楼间距最好 ≥ 前楼高度 × ${cot.toFixed(1)}。`
     : '';
 
   document.getElementById('conclusion').innerHTML =
     `<p>📌 <b>一句话解读:</b>你的房子朝${facingName},冬至(最冷时)这面墙每天晒 <b>${winter} 小时</b>太阳,夏至晒 <b>${summer} 小时</b>。${mood}</p>${extra}`;
-
   document.getElementById('spacing-tip').innerHTML = spacing;
 }
 
@@ -282,12 +428,16 @@ function renderAll() {
   document.querySelectorAll('#city-chips button').forEach(b =>
     b.classList.toggle('active', Math.abs(parseFloat(b.dataset.lat) - lat) < 0.001));
   document.querySelectorAll('#dir-grid button').forEach(b =>
-    b.classList.toggle('active', Math.round(facing / 45) === Number(b.dataset.idx)));
-  renderSeasonCards();
+    b.classList.toggle('active', Math.round(norm360(facing) / 45) % 8 === Number(b.dataset.idx)));
+  document.querySelectorAll('#season-tabs button').forEach(b =>
+    b.classList.toggle('active', b.dataset.key === selSeason.key));
+  renderTop(false);
   renderSection();
-  renderSeasonTabs();
-  renderTopviews();
   renderConclusion();
 }
 
+/* 初始化 */
+clampTimes();
+t = clamp(9, dayWindow().rise + 0.02, dayWindow().set - 0.02);
+secAlt = clamp(noonAlt(lat, -23.44), 4, 80);
 renderAll();

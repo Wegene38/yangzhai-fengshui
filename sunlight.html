@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>日照模拟器 · 一年四季太阳晒到哪</title>
-  <meta name="description" content="设置纬度与房屋朝向,模拟一年四季太阳高度与轨迹:正午阳光能进屋多深、一天之中晒到房子的哪一侧、朝向墙面日照时长。传统文化与生活参考。" />
+  <title>日照模拟器 · 拖着太阳看采光</title>
+  <meta name="description" content="拖动太阳绕着房子走,实时看一天之中晒到房子哪一面、影子有多长;上下拉动太阳看正午光照进屋多深。传统文化与生活参考。" />
   <meta name="theme-color" content="#a63c2a" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23e67e22'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='%23f7f1e3'%3E%E2%98%80%3C/text%3E%3C/svg%3E" />
@@ -21,7 +21,7 @@
 
     <!-- ① 设置 -->
     <section class="app-card">
-      <h2 class="app-h2">① 你在哪个城市?房子朝哪?</h2>
+      <h2 class="app-h2">① 先设置:你在哪座城市?房子朝哪?</h2>
       <div class="city-row">
         <div class="chips" id="city-chips"></div>
         <label class="lat-input">纬度
@@ -31,36 +31,40 @@
       </div>
       <div class="dir-grid" id="dir-grid"></div>
       <p class="app-hint">
-        ☀️ 以下按「真太阳时」估算(忽略经度时差与大气折射),窗户按 2.4 米高估算——数字不用较真,
+        ☀️ 以下按「真太阳时」估算(忽略经度时差),按 2.4 米高的窗、10 米高的楼计算——数字不用较真,
         <b>重点感受季节和朝向带来的差异</b>。
       </p>
     </section>
 
-    <!-- ② 四季概览 -->
+    <!-- ② 互动俯视图 -->
     <section class="app-card">
-      <h2 class="app-h2">② 一年四季,太阳怎么变?</h2>
-      <div class="season-cards" id="season-cards"></div>
-    </section>
-
-    <!-- ③ 剖面图 -->
-    <section class="app-card">
-      <h2 class="app-h2">③ 正午阳光,能进屋多深?</h2>
-      <p class="layout-hint">从朝向那面窗看进去:线越平(太阳越低),光照得越深。<b>冬天太阳低,反而晒得深。</b></p>
-      <div class="section-wrap"><svg id="section-svg" viewBox="0 0 560 250"></svg></div>
-      <ul class="depth-list" id="depth-list"></ul>
-    </section>
-
-    <!-- ④ 俯视图 -->
-    <section class="app-card">
-      <h2 class="app-h2">④ 一天之中,能晒到哪里?</h2>
-      <p class="layout-hint">把你家想成一个方块、朝向的那条边朝上。箭头是太阳来的方向,<b>黄边就是晒到的地方</b>。</p>
+      <h2 class="app-h2">② 拖着太阳走一圈,看晒到哪里</h2>
       <div class="season-tabs" id="season-tabs"></div>
-      <div class="topviews" id="topviews"></div>
+      <div class="sun-stage"><svg id="top-svg" viewBox="0 0 420 420"></svg></div>
+      <div class="big-readout" id="top-readout"></div>
+      <p class="mini-cap" id="top-cap"></p>
+      <p class="day-stats" id="day-stats"></p>
+      <div class="play-row"><button id="play-btn" class="play-btn" type="button">▶ 让太阳自动跑一整天</button></div>
+      <p class="app-hint">
+        🧲 <b>直接用手指拖着太阳走</b>(或点图中任意位置,太阳会跳过去)。太阳只能沿金色弧线走——
+        那是它这一天的轨迹,灰色区域是黑夜。影子长度按 10 米高的楼估算。
+      </p>
     </section>
 
-    <!-- ⑤ 结论 -->
+    <!-- ③ 互动剖面图 -->
     <section class="app-card">
-      <h2 class="app-h2">⑤ 大白话结论</h2>
+      <h2 class="app-h2">③ 上下拉太阳,看光照进屋多深</h2>
+      <div class="sun-stage"><svg id="sec-svg" viewBox="0 0 560 262"></svg></div>
+      <p class="mini-cap" id="sec-cap"></p>
+      <p class="app-hint">
+        👇 <b>上下拖动太阳</b>(或点图中任意高度):太阳越低(像冬天),光线越斜,<b>照得越深</b>;
+        太阳越高(像夏天),反而只晒窗边。弧线上几个圆点是节气参考,拖过去会自动吸住。
+      </p>
+    </section>
+
+    <!-- ④ 结论 -->
+    <section class="app-card">
+      <h2 class="app-h2">④ 大白话结论</h2>
       <div class="plain-summary" id="conclusion"></div>
       <div class="spacing-tip" id="spacing-tip"></div>
     </section>

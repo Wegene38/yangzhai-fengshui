@@ -76,6 +76,54 @@ body {
 .layout-hint { text-align: center; font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 1rem; }
 .layout-hint b { color: var(--red-deep); }
 
+/* ---------- 互动图 ---------- */
+.sun-stage {
+  display: flex;
+  justify-content: center;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#top-svg {
+  width: min(400px, 88vw);
+  height: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+#top-svg:active, #sec-svg:active { cursor: grabbing; }
+
+#sec-svg {
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+.big-readout { text-align: center; font-size: 1.18rem; margin-top: 0.7rem; }
+.big-readout b { color: var(--red-deep); font-size: 1.3rem; }
+
+.day-stats { text-align: center; font-size: 0.9rem; color: var(--ink-soft); margin-top: 0.4rem; }
+
+.play-row { text-align: center; margin-top: 0.9rem; }
+
+.play-btn {
+  font-family: var(--serif);
+  font-size: 1rem;
+  padding: 0.55rem 1.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--red-deep);
+  background: var(--red);
+  color: #f7f1e3;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: background 0.15s;
+}
+
+.play-btn:hover { background: var(--red-deep); }
+
 /* ---------- 设置区 ---------- */
 .city-row {
   display: flex;
