@@ -242,6 +242,9 @@ function updateState() {
   const sit = DIRECTIONS[(idx + 4) % 8];
   const gua = DIR_TRIGRAM[sit];
 
+  // 记住选择,日照模拟器会自动同步这个朝向
+  try { localStorage.setItem('yz_facing_idx', String(((idx % 8) + 8) % 8)); } catch (e) { /* ignore */ }
+
   document.getElementById('facing').textContent = facing;
   document.getElementById('sitting').textContent = sit;
   document.getElementById('gua-name').textContent = `${TRIGRAM_SYMBOL[gua]} ${gua}宅`;

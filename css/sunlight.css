@@ -1,0 +1,255 @@
+/* ========== 日照模拟器 · 样式(与罗盘页同底) ========== */
+:root {
+  --paper: #f7f3e8;
+  --ink: #2b2620;
+  --ink-soft: #5c5346;
+  --red: #a63c2a;
+  --red-deep: #7e2a1d;
+  --gold: #b8860b;
+  --gold-soft: #d4af37;
+  --gold-bg: #faf3dd;
+  --gold-line: #e5d5a1;
+  --line: #ddd3bd;
+  --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", "Source Han Serif SC", serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--serif);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.app-top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.2rem;
+  background: linear-gradient(150deg, #c96a1e, #a63c2a);
+  color: #f7f1e3;
+  box-shadow: 0 2px 12px rgba(126, 42, 29, 0.3);
+}
+
+.app-top .back { color: rgba(247, 241, 227, 0.85); text-decoration: none; font-size: 0.92rem; white-space: nowrap; }
+.app-top .back:hover { color: #fff; }
+.app-title { font-weight: 700; letter-spacing: 0.1em; font-size: 1.02rem; }
+
+.app-main { max-width: 760px; margin: 0 auto; padding: 1.4rem 1rem 2.5rem; }
+
+.app-card {
+  background: #fffdf7;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.6rem 1.4rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 8px 30px rgba(43, 38, 32, 0.07);
+}
+
+.app-h2 {
+  font-size: 1.15rem;
+  color: var(--red);
+  letter-spacing: 0.05em;
+  margin-bottom: 1.1rem;
+  text-align: center;
+}
+
+.app-hint {
+  margin-top: 1.1rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+}
+
+.app-hint b { color: var(--red-deep); }
+
+.layout-hint { text-align: center; font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.layout-hint b { color: var(--red-deep); }
+
+/* ---------- 设置区 ---------- */
+.city-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.2rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+
+.chips button {
+  font-family: var(--serif);
+  font-size: 0.88rem;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.chips button:hover { border-color: var(--gold); }
+.chips button.active { background: var(--gold-soft); border-color: var(--gold); color: #fff; font-weight: 700; }
+
+.lat-input { font-size: 0.95rem; color: var(--ink); display: flex; align-items: center; gap: 0.4rem; }
+
+.lat-input input {
+  font-family: var(--serif);
+  font-size: 1rem;
+  width: 5.2rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.lat-input small { color: var(--ink-soft); }
+
+.dir-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+
+.dir-grid button {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  padding: 0.55rem 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dir-grid button:hover { border-color: var(--gold); }
+
+.dir-grid button.active {
+  background: var(--red);
+  border-color: var(--red-deep);
+  color: #f7f1e3;
+  font-weight: 700;
+}
+
+/* ---------- 四季卡片 ---------- */
+.season-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.9rem;
+}
+
+.season-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  font-size: 0.88rem;
+}
+
+.season-card h3 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+.season-card h3 small { font-weight: 400; color: var(--ink-soft); font-size: 0.78rem; margin-left: 0.3rem; }
+.season-card p { color: var(--ink-soft); padding: 0.05rem 0; }
+.season-card p b { color: var(--red-deep); font-size: 0.95rem; }
+
+/* ---------- 剖面图 ---------- */
+.section-wrap { overflow-x: auto; }
+
+#section-svg { width: 100%; min-width: 480px; height: auto; display: block; }
+
+.depth-list { list-style: none; margin-top: 0.9rem; }
+
+.depth-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.92rem;
+}
+
+.depth-list li:last-child { border-bottom: none; }
+
+.depth-list .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; transform: translateY(1px); }
+.depth-list b { color: var(--red-deep); }
+.depth-list small { color: var(--ink-soft); }
+
+/* ---------- 俯视图 ---------- */
+.season-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.season-tabs button {
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.season-tabs button.active {
+  background: var(--red);
+  border-color: var(--red-deep);
+  color: #f7f1e3;
+  font-weight: 700;
+}
+
+.topviews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.mini { text-align: center; }
+
+.mini svg { width: 100%; max-width: 190px; height: auto; }
+
+.mini-cap { font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.2rem; line-height: 1.5; }
+.mini-cap b { color: var(--red-deep); }
+
+/* ---------- 结论 ---------- */
+.plain-summary {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-line);
+  border-radius: 10px;
+  padding: 1rem 1.3rem;
+  font-size: 0.98rem;
+  line-height: 1.9;
+}
+
+.plain-summary b { color: var(--red-deep); }
+.plain-summary p { margin-bottom: 0.3rem; }
+
+.spacing-tip {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  background: #f2efe4;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+}
+
+.spacing-tip b { color: var(--red-deep); }
+
+.app-footer { text-align: center; font-size: 0.82rem; color: var(--ink-soft); padding: 0.5rem 0 1rem; }
+.app-footer a { color: var(--red); }
+
+@media (max-width: 480px) {
+  .app-card { padding: 1.2rem 1rem; }
+  .dir-grid button { font-size: 0.85rem; }
+}

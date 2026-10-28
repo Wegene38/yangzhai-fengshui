@@ -245,6 +245,21 @@ body {
 
 .app-footer a { color: var(--red); }
 
+/* ---------- 户型不是九宫格 ---------- */
+.plan-svg { width: 100%; max-width: 380px; display: block; margin: 0 auto 1rem; }
+
+.plan-steps { margin: 0 0 1rem 1.3rem; }
+
+.plan-steps li { font-size: 0.94rem; margin: 0.35rem 0; }
+.plan-steps li b { color: var(--red-deep); }
+
+.faq-box { border-top: 1px dashed var(--line); padding-top: 0.8rem; }
+
+.faq-box p { font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0.4rem; }
+.faq-box p b { color: var(--ink); }
+
+.plan-cta { text-align: center; margin-top: 1.2rem; }
+
 @media (max-width: 480px) {
   .app-card { padding: 1.2rem 1rem; }
   .cell-room { font-size: 0.85rem; }
