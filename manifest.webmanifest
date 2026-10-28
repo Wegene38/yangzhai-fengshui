@@ -1,17 +1,18 @@
 {
-  "name": "阳宅罗盘 · 布局工具",
-  "short_name": "阳宅罗盘",
-  "description": "转动罗盘选朝向,生成阳宅九宫格布局建议。传统文化参考。",
-  "start_url": "luopan.html",
+  "name": "阳宅风水 · 罗盘与日照",
+  "short_name": "阳宅风水",
+  "description": "阳宅风水入门工具:命卦测算、罗盘布局、日照模拟。传统文化参考。",
+  "lang": "zh-CN",
+  "id": "./",
+  "scope": "./",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7f3e8",
   "theme_color": "#a63c2a",
   "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }

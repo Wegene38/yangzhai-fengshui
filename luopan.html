@@ -6,7 +6,11 @@
   <title>阳宅罗盘 · 选朝向看布局</title>
   <meta name="description" content="像转动真罗盘一样选择你家朝向,自动生成九宫格布局建议:主卧放哪、厨房卫生间放哪,点一点就看懂。传统文化参考,请勿迷信。" />
   <meta name="theme-color" content="#a63c2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="阳宅风水" />
   <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23a63c2a'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='%23f7f1e3'%3E%E7%BD%97%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/luopan.css" />
 </head>
@@ -15,6 +19,7 @@
   <header class="app-top">
     <a class="back" href="index.html">← 返回首页</a>
     <div class="app-title">🧭 阳宅罗盘 · 布局工具</div>
+    <button class="install-btn top-install" type="button" title="安装到桌面 / 主屏幕">📥 安装</button>
   </header>
 
   <main class="app-main">
@@ -108,5 +113,9 @@
   </main>
 
   <script src="js/luopan.js"></script>
+  <script src="js/install.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  </script>
 </body>
 </html>

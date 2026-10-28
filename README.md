@@ -12,6 +12,16 @@
 
 GitHub Pages:https://wegene38.github.io/yangzhai-fengshui/
 
+## 安装到桌面 / 主屏幕(PWA)
+
+网站支持安装为本地 App:
+
+- **电脑 Chrome / Edge**:地址栏右侧点「⊕ 安装」,或在页面右上角点「📥 安装」
+- **iPhone / iPad(Safari)**:点底部分享按钮 →「添加到主屏幕」
+- **Android(Chrome)**:菜单 →「添加到主屏幕 / 安装应用」
+
+安装后全屏独立运行(由 `manifest.webmanifest` + `sw.js` 离线缓存支持,断网也能用)。
+
 ## 技术
 
 纯 HTML / CSS / JavaScript,无构建步骤、无外部依赖(可在国内直接访问)。

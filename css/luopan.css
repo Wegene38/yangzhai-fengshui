@@ -51,6 +51,20 @@ body {
 
 .app-title { font-weight: 700; letter-spacing: 0.1em; font-size: 1.02rem; text-align: center; }
 
+.top-install {
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(247, 241, 227, 0.5);
+  background: rgba(247, 241, 227, 0.15);
+  color: #f7f1e3;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.top-install:hover { background: rgba(247, 241, 227, 0.3); }
+
 /* ---------- 主体 ---------- */
 .app-main {
   max-width: 720px;

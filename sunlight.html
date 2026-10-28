@@ -6,7 +6,11 @@
   <title>日照模拟器 · 拖着太阳看采光</title>
   <meta name="description" content="拖动太阳绕着房子走,实时看一天之中晒到房子哪一面、影子有多长;上下拉动太阳看正午光照进屋多深。传统文化与生活参考。" />
   <meta name="theme-color" content="#a63c2a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="阳宅风水" />
   <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23e67e22'/%3E%3Ctext x='50' y='66' font-size='52' text-anchor='middle' fill='%23f7f1e3'%3E%E2%98%80%3C/text%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/sunlight.css" />
 </head>
@@ -15,6 +19,7 @@
   <header class="app-top">
     <a class="back" href="index.html">← 返回首页</a>
     <div class="app-title">☀️ 日照模拟器</div>
+    <button class="install-btn top-install" type="button" title="安装到桌面 / 主屏幕">📥 安装</button>
   </header>
 
   <main class="app-main">
@@ -73,5 +78,9 @@
   </main>
 
   <script src="js/sunlight.js"></script>
+  <script src="js/install.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  </script>
 </body>
 </html>
